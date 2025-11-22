@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoFixture;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ReactSim.DTO;
+using ReactSim.DTO.Activity;
 
 namespace ReactSim.Controllers
 {
@@ -8,27 +10,25 @@ namespace ReactSim.Controllers
     [ApiController]
     public class ActivityController : ControllerBase
     {
+        private readonly IFixture fixture;
+        public ActivityController()
+        {
+           this.fixture = new Fixture();
+        }
 
         [HttpGet]
         public IActionResult GetActivities()
         {
-            var config = new JsonConfigParameters
-            {
-                name = "Activity One",
-                config_url = "https://example.com/config1",
-                json_params_url = "https://example.com/params1",
-                user_url = "https://example.com/user1",
-                analytics_url = "https://example.com/analytics1",
-                analytics_list_url= "https://example.com/analytics_list1"
-            };
+            var config = this.fixture.Create<JsonConfigParameters>();
 
             return Ok(config);
         }
 
         [HttpPost]
-        public IActionResult DeployActivity()
+        public IActionResult DeployActivity(DeployActivityRequest deployActivityDto)
         {
-            return Ok("Atividade deployed");
+            var response = this.fixture.Create<DeployActivityResponse>();
+            return Ok(response);
         }
     }
 }
