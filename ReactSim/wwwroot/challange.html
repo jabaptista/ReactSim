@@ -1,0 +1,855 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReactSim: Avaliação Tática</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            background-color: #1e293b;
+            color: white;
+            padding: 20px 30px;
+            position: relative;
+        }
+
+            .header h1 {
+                font-size: 24px;
+                margin-bottom: 12px;
+            }
+
+        .tabs {
+            display: flex;
+            gap: 12px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-size: 14px;
+            border: 2px solid transparent;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+            .tab.active {
+                background-color: #ef4444;
+                color: white;
+                border-color: #ef4444;
+                font-weight: 500;
+            }
+
+            .tab:not(.active) {
+                color: #94a3b8;
+                border-color: #475569;
+            }
+
+                .tab:not(.active):hover {
+                    background-color: rgba(255, 255, 255, 0.15);
+                    border-color: #64748b;
+                }
+
+        .progress {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            text-align: right;
+        }
+
+        .progress-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #94a3b8;
+            margin-bottom: 4px;
+        }
+
+        .progress-value {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background-color: #ef4444;
+            margin-top: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .content {
+            padding: 30px;
+            min-height: 500px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 30px;
+            color: #64748b;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #e2e8f0;
+            border-top-color: #ef4444;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .error {
+            background-color: #fee2e2;
+            border: 2px solid #ef4444;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            color: #991b1b;
+        }
+
+            .error h3 {
+                margin-bottom: 10px;
+                color: #dc2626;
+            }
+
+        .scenario-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .warning-icon {
+            width: 24px;
+            height: 24px;
+            background-color: #fbbf24;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .scenario-header h2 {
+            font-size: 18px;
+            color: #1e293b;
+        }
+
+        .scenario-description {
+            background-color: #f8fafc;
+            border-left: 4px solid #cbd5e1;
+            padding: 20px;
+            margin-bottom: 30px;
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        .scenario-media {
+            margin: 20px 0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+            .scenario-media img {
+                width: 100%;
+                height: auto;
+                display: block;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            }
+
+            .scenario-media video {
+                width: 100%;
+                height: auto;
+                display: block;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                background-color: #000;
+            }
+
+        .media-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+            .media-gallery img,
+            .media-gallery video {
+                width: 100%;
+                height: 200px;
+                object-fit: cover;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                cursor: pointer;
+                transition: transform 0.3s;
+            }
+
+                .media-gallery img:hover,
+                .media-gallery video:hover {
+                    transform: scale(1.05);
+                }
+
+        .media-caption {
+            font-size: 13px;
+            color: #64748b;
+            font-style: italic;
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        .options-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 20px;
+        }
+
+        .option {
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+        }
+
+            .option:hover {
+                border-color: #94a3b8;
+                background-color: #f8fafc;
+            }
+
+            .option.selected {
+                border-color: #3b82f6;
+                background-color: #eff6ff;
+            }
+
+        .radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #cbd5e1;
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 2px;
+            position: relative;
+        }
+
+        .option.selected .radio {
+            border-color: #3b82f6;
+        }
+
+            .option.selected .radio::after {
+                content: '';
+                position: absolute;
+                width: 10px;
+                height: 10px;
+                background-color: #3b82f6;
+                border-radius: 50%;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+
+        .option-text {
+            color: #475569;
+            line-height: 1.5;
+            flex: 1;
+        }
+
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 30px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: #94a3b8;
+        }
+
+            .btn-secondary:hover:not(:disabled) {
+                background-color: #f1f5f9;
+            }
+
+            .btn-secondary:disabled {
+                opacity: 0.4;
+                cursor: not-allowed;
+            }
+
+        .btn-primary {
+            background-color: #1e293b;
+            color: white;
+        }
+
+            .btn-primary:hover {
+                background-color: #334155;
+            }
+
+            .btn-primary::after {
+                content: ' ›';
+                margin-left: 5px;
+            }
+
+        .btn-secondary::before {
+            content: '‹ ';
+            margin-right: 5px;
+        }
+
+        .completion-screen {
+            text-align: center;
+            padding: 60px 30px;
+        }
+
+            .completion-screen h2 {
+                font-size: 28px;
+                color: #1e293b;
+                margin-bottom: 20px;
+            }
+
+            .completion-screen p {
+                font-size: 16px;
+                color: #64748b;
+                margin-bottom: 30px;
+            }
+
+        .results-summary {
+            background-color: #f8fafc;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+            .result-item:last-child {
+                border-bottom: none;
+            }
+
+        .result-label {
+            color: #475569;
+            font-weight: 500;
+        }
+
+        .result-value {
+            color: #1e293b;
+            font-weight: 600;
+        }
+
+        .btn-submit {
+            background-color: #22c55e;
+            color: white;
+            padding: 14px 32px;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+            .btn-submit:hover:not(:disabled) {
+                background-color: #16a34a;
+            }
+
+            .btn-submit:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+            }
+
+        .btn-restart {
+            background-color: #64748b;
+            color: white;
+            padding: 12px 24px;
+            margin-top: 10px;
+        }
+
+            .btn-restart:hover {
+                background-color: #475569;
+            }
+
+        .submission-success {
+            background-color: #d1fae5;
+            border: 2px solid #22c55e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            color: #065f46;
+        }
+
+            .submission-success h3 {
+                margin-bottom: 10px;
+                color: #047857;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="progress">
+                <div class="progress-label">PROGRESSO</div>
+                <div class="progress-value" id="progressText">-/-</div>
+            </div>
+            <h1>ReactSim: Avaliação Tática</h1>
+            <div class="tabs">
+                <div class="tab active">Chefe de Grupo</div>
+                <div class="tab">Gestão de Recursos e Decisão Tática</div>
+            </div>
+            <div class="progress-bar" id="progressBar" style="width: 0%;"></div>
+        </div>
+
+        <div class="content" id="content">
+            <div class="loading">
+                <div class="loading-spinner"></div>
+                <p>Carregando avaliação...</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <button class="btn btn-secondary" id="btnPrevious" onclick="previousQuestion()" disabled>Anterior</button>
+            <button class="btn btn-primary" id="btnNext" onclick="nextQuestion()">Próxima</button>
+        </div>
+    </div>
+
+    <!-- Hidden fields para identificação -->
+    <input type="hidden" id="candidateId" value="">
+    <input type="hidden" id="evaluationId" value="">
+
+    <script>
+        // Configuração da API
+        const API_CONFIG = {
+            baseUrl: 'https://api.example.com', // Substitua pela URL real da API
+            endpoints: {
+                getQuestions: '/api/evaluations/questions',
+                submitAnswers: '/api/evaluations/submit'
+            }
+        };
+
+        let questions = [];
+        let currentQuestion = 0;
+        let answers = {};
+        let candidateInfo = {
+            candidateId: '',
+            evaluationId: ''
+        };
+
+        // Inicialização
+        async function initialize() {
+            // Obter parâmetros da URL (candidato e avaliação)
+            const urlParams = new URLSearchParams(window.location.search);
+            candidateInfo.candidateId = urlParams.get('candidateId') || 'DEMO-CANDIDATE-001';
+            candidateInfo.evaluationId = urlParams.get('evaluationId') || 'EVAL-' + Date.now();
+
+            // Preencher hidden fields
+            document.getElementById('candidateId').value = candidateInfo.candidateId;
+            document.getElementById('evaluationId').value = candidateInfo.evaluationId;
+
+            // Carregar questões da API
+            await loadQuestionsFromAPI();
+        }
+
+        async function loadQuestionsFromAPI() {
+            try {
+                // Simulação de chamada à API - Substitua pela chamada real
+                // const response = await fetch(`${API_CONFIG.baseUrl}${API_CONFIG.endpoints.getQuestions}?evaluationId=${candidateInfo.evaluationId}`);
+                // const data = await response.json();
+                // questions = data.questions;
+
+                // Simulação com timeout para demonstração
+                await new Promise(resolve => setTimeout(resolve, 1500));
+
+                // Dados de exemplo - Substitua pela resposta real da API
+                questions = [
+                    {
+                        id: 'q1',
+                        title: "Cenário Situacional 1",
+                        description: "Incêndio urbano num 3º andar de um edifício antigo no centro histórico. A escada de serviço é estreita e há relatos de uma pessoa acamada no 4º andar. O fogo está a alastrar rapidamente pela caixa de escadas.",
+                        media: {
+                            type: 'image', // 'image', 'video', ou 'gallery'
+                            url: 'https://images.unsplash.com/photo-1577962917302-cd874c4e31d2?w=800',
+                            caption: 'Exemplo de incêndio urbano em edifício antigo'
+                        },
+                        options: [
+                            { id: 'opt1', text: "Ordenar entrada imediata pela escada com linha de ataque, ignorando a ventilação." },
+                            { id: 'opt2', text: "Estabelecer comando, solicitar auto-escada para salvamento no 4º andar e iniciar combate defensivo." },
+                            { id: 'opt3', text: "Dividir a equipa: binómio para busca e salvamento imediato (4º andar) e binómio para contenção do fogo no 3º andar." },
+                            { id: 'opt4', text: "Aguardar reforços antes de qualquer atuação." }
+                        ]
+                    },
+                    {
+                        id: 'q2',
+                        title: "Cenário Situacional 2",
+                        description: "Acidente rodoviário com veículo pesado transportando materiais perigosos (gasóleo) numa via rápida. Há derrame significativo e risco de ignição. Três vítimas encarceradas e trânsito intenso a aproximar-se.",
+                        media: {
+                            type: 'video',
+                            url: 'https://www.w3schools.com/html/mov_bbb.mp4',
+                            caption: 'Simulação de acidente com materiais perigosos'
+                        },
+                        options: [
+                            { id: 'opt1', text: "Aproximar-se imediatamente para iniciar desencarceramento das vítimas." },
+                            { id: 'opt2', text: "Estabelecer perímetro de segurança, identificar o produto, solicitar GIPS e gerir o trânsito." },
+                            { id: 'opt3', text: "Fazer arrefecimento do tanque com água enquanto se procede ao desencarceramento." },
+                            { id: 'opt4', text: "Evacuar apenas as vítimas que conseguem sair autonomamente e aguardar." }
+                        ]
+                    },
+                    {
+                        id: 'q3',
+                        title: "Cenário Situacional 3",
+                        description: "Fuga de gás natural numa zona residencial densamente povoada. Fortes odores reportados por múltiplos moradores. Empresa distribuidora ainda não chegou ao local.",
+                        media: {
+                            type: 'gallery',
+                            items: [
+                                { url: 'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=400', caption: 'Zona residencial' },
+                                { url: 'https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=400', caption: 'Sistema de gás' }
+                            ]
+                        },
+                        options: [
+                            { id: 'opt1', text: "Entrar nos edifícios para localizar a origem da fuga imediatamente." },
+                            { id: 'opt2', text: "Estabelecer perímetro, evacuar zona de risco, cortar energia elétrica e aguardar empresa." },
+                            { id: 'opt3', text: "Ventilar os edifícios abrindo todas as janelas e portas." },
+                            { id: 'opt4', text: "Usar detetores de gás em todos os edifícios antes de qualquer outra ação." }
+                        ]
+                    },
+                    {
+                        id: 'q4',
+                        title: "Cenário Situacional 4",
+                        description: "Desabamento parcial de edifício em construção com relatos de trabalhadores soterrados. Estrutura instável com risco de colapso adicional. Chuva intensa a dificultar as operações.",
+                        options: [
+                            { id: 'opt1', text: "Iniciar busca e resgate imediato com toda a equipa disponível." },
+                            { id: 'opt2', text: "Avaliar estabilidade estrutural, estabelecer zonas de segurança e solicitar especialistas em resgate estrutural." },
+                            { id: 'opt3', text: "Utilizar maquinaria pesada disponível no local para remoção rápida de escombros." },
+                            { id: 'opt4', text: "Evacuar área circundante e aguardar condições meteorológicas favoráveis." }
+                        ]
+                    }
+                ];
+
+                if (questions.length > 0) {
+                    renderQuestion();
+                } else {
+                    showError('Nenhuma questão encontrada.');
+                }
+
+            } catch (error) {
+                console.error('Erro ao carregar questões:', error);
+                showError('Erro ao carregar as questões da avaliação. Por favor, tente novamente.');
+            }
+        }
+
+        function showError(message) {
+            const content = document.getElementById('content');
+            content.innerHTML = `
+                    <div class="error">
+                        <h3>Erro</h3>
+                        <p>${message}</p>
+                        <button class="btn btn-primary" onclick="initialize()" style="margin-top: 15px;">
+                            Tentar Novamente
+                        </button>
+                    </div>
+                `;
+        }
+
+        function renderQuestion() {
+            const q = questions[currentQuestion];
+            const content = document.getElementById('content');
+
+            let mediaHtml = '';
+
+            // Renderizar mídia conforme o tipo
+            if (q.media) {
+                if (q.media.type === 'image') {
+                    mediaHtml = `
+                            <div class="scenario-media">
+                                <img src="${q.media.url}" alt="${q.media.caption || 'Imagem do cenário'}" loading="lazy">
+                                ${q.media.caption ? `<p class="media-caption">${q.media.caption}</p>` : ''}
+                            </div>
+                        `;
+                } else if (q.media.type === 'video') {
+                    mediaHtml = `
+                            <div class="scenario-media">
+                                <video controls preload="metadata">
+                                    <source src="${q.media.url}" type="video/mp4">
+                                    Seu navegador não suporta a reprodução de vídeo.
+                                </video>
+                                ${q.media.caption ? `<p class="media-caption">${q.media.caption}</p>` : ''}
+                            </div>
+                        `;
+                } else if (q.media.type === 'gallery' && q.media.items) {
+                    mediaHtml = `
+                            <div class="media-gallery">
+                                ${q.media.items.map((item, idx) => {
+                        if (item.url.includes('.mp4') || item.url.includes('video')) {
+                            return `
+                                            <div>
+                                                <video controls preload="metadata">
+                                                    <source src="${item.url}" type="video/mp4">
+                                                </video>
+                                                ${item.caption ? `<p class="media-caption">${item.caption}</p>` : ''}
+                                            </div>
+                                        `;
+                        } else {
+                            return `
+                                            <div>
+                                                <img src="${item.url}" alt="${item.caption || 'Imagem ' + (idx + 1)}" loading="lazy">
+                                                ${item.caption ? `<p class="media-caption">${item.caption}</p>` : ''}
+                                            </div>
+                                        `;
+                        }
+                    }).join('')}
+                            </div>
+                        `;
+                }
+            }
+
+            content.innerHTML = `
+                    <div class="scenario-header">
+                        <div class="warning-icon">⚠</div>
+                        <h2>${q.title}</h2>
+                    </div>
+
+                    <div class="scenario-description">
+                        ${q.description}
+                    </div>
+
+                    ${mediaHtml}
+
+                    <div class="options-title">Opções de Resposta</div>
+
+                    ${q.options.map((option, index) => `
+                        <div class="option ${answers[q.id] === option.id ? 'selected' : ''}" onclick="selectOption('${option.id}')">
+                            <div class="radio"></div>
+                            <div class="option-text">${option.text}</div>
+                        </div>
+                    `).join('')}
+                `;
+
+            updateProgress();
+            updateButtons();
+        }
+
+        function renderCompletion() {
+            const content = document.getElementById('content');
+            const totalQuestions = questions.length;
+            const answeredQuestions = Object.keys(answers).length;
+
+            content.innerHTML = `
+                    <div class="completion-screen">
+                        <h2>✓ Avaliação Concluída!</h2>
+                        <p>Revise suas respostas e submeta a avaliação quando estiver pronto.</p>
+
+                        <div class="results-summary">
+                            <div class="result-item">
+                                <span class="result-label">Candidato:</span>
+                                <span class="result-value">${candidateInfo.candidateId}</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">ID da Avaliação:</span>
+                                <span class="result-value">${candidateInfo.evaluationId}</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Total de Questões:</span>
+                                <span class="result-value">${totalQuestions}</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Questões Respondidas:</span>
+                                <span class="result-value">${answeredQuestions}</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Status:</span>
+                                <span class="result-value" style="color: #22c55e;">Pronto para Submeter</span>
+                            </div>
+                        </div>
+
+                        <div id="submissionMessage"></div>
+
+                        <button class="btn btn-submit" id="btnSubmit" onclick="submitEvaluation()">
+                            Submeter Avaliação
+                        </button>
+                        <br>
+                        <button class="btn btn-restart" onclick="restartQuiz()">
+                            Rever Respostas
+                        </button>
+                    </div>
+                `;
+
+            document.getElementById('btnNext').style.display = 'none';
+            document.getElementById('btnPrevious').style.display = 'none';
+        }
+
+        function selectOption(optionId) {
+            const q = questions[currentQuestion];
+            answers[q.id] = optionId;
+            renderQuestion();
+        }
+
+        function updateProgress() {
+            const total = questions.length;
+            const current = currentQuestion + 1;
+            const percentage = (current / total) * 100;
+
+            document.getElementById('progressText').textContent = `${current}/${total}`;
+            document.getElementById('progressBar').style.width = `${percentage}%`;
+        }
+
+        function updateButtons() {
+            const btnPrevious = document.getElementById('btnPrevious');
+            const btnNext = document.getElementById('btnNext');
+
+            btnPrevious.disabled = currentQuestion === 0;
+
+            if (currentQuestion === questions.length - 1) {
+                btnNext.textContent = 'Finalizar';
+                btnNext.innerHTML = 'Finalizar';
+            } else {
+                btnNext.innerHTML = 'Próxima';
+            }
+        }
+
+        function nextQuestion() {
+            const q = questions[currentQuestion];
+            if (answers[q.id] === undefined) {
+                alert('Por favor, selecione uma opção antes de continuar.');
+                return;
+            }
+
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                renderQuestion();
+            } else {
+                renderCompletion();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion();
+            }
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            document.getElementById('btnNext').style.display = 'inline-block';
+            document.getElementById('btnPrevious').style.display = 'inline-block';
+            renderQuestion();
+        }
+
+        async function submitEvaluation() {
+            const messageDiv = document.getElementById('submissionMessage');
+            const submitBtn = document.getElementById('btnSubmit');
+
+            // Desabilitar botão durante submissão
+            submitBtn.disabled = true;
+
+            // Preparar dados para submissão
+            const submissionData = {
+                candidateId: candidateInfo.candidateId,
+                evaluationId: candidateInfo.evaluationId,
+                timestamp: new Date().toISOString(),
+                answers: Object.keys(answers).map(questionId => ({
+                    questionId: questionId,
+                    selectedOptionId: answers[questionId]
+                })),
+                completionRate: (Object.keys(answers).length / questions.length * 100).toFixed(0)
+            };
+
+            messageDiv.innerHTML = '<p style="color: #64748b; margin: 20px 0;">Submetendo avaliação...</p>';
+
+            try {
+                // Chamada à API - Descomente e ajuste conforme sua API
+                /*
+                const response = await fetch(`${API_CONFIG.baseUrl}${API_CONFIG.endpoints.submitAnswers}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(submissionData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Erro ao submeter avaliação');
+                }
+
+                const result = await response.json();
+                */
+
+                // Simulação de envio (remover quando integrar com API real)
+                await new Promise(resolve => setTimeout(resolve, 1500));
+
+                console.log('Dados submetidos:', submissionData);
+
+                messageDiv.innerHTML = `
+                        <div class="submission-success">
+                            <h3>✓ Avaliação Submetida com Sucesso!</h3>
+                            <p style="margin: 0;">Suas respostas foram registradas em ${new Date().toLocaleString('pt-PT')}.</p>
+                            <p style="margin: 10px 0 0 0; font-size: 14px;">Candidato: ${candidateInfo.candidateId}</p>
+                            <p style="margin: 5px 0 0 0; font-size: 14px;">ID da Avaliação: ${candidateInfo.evaluationId}</p>
+                        </div>
+                    `;
+
+                // Ocultar botão de submeter após sucesso
+                submitBtn.style.display = 'none';
+
+            } catch (error) {
+                console.error('Erro ao submeter:', error);
+
+                messageDiv.innerHTML = `
+                        <div class="error">
+                            <h3>Erro na Submissão</h3>
+                            <p>Não foi possível submeter a avaliação. Por favor, tente novamente.</p>
+                        </div>
+                    `;
+
+                // Reabilitar botão em caso de erro
+                submitBtn.disabled = false;
+            }
+        }
+
+        // Inicializar aplicação
+        initialize();
+    </script>
+</body>
+</html>
