@@ -882,7 +882,7 @@
                     <label class="api-label">URL API Competências</label>
                     <input type="text" class="api-input" id="api-competencias-url" placeholder="https://api.exemplo.com/competencias" value="https://api.exemplo.com/competencias">
                 </div>
-                <button class="btn-load-competencias" id="btn-load-competencias" onclick="carregarCompetencias()">
+                <button class="btn-load-competencias" id="btn-load-competencias" onclick="loadCompetencies()">
                     🔄 Carregar Competências
                 </button>
                 <div class="api-config" style="margin-top: 16px;">
@@ -898,16 +898,16 @@
             <div class="sidebar-section">
                 <div class="sidebar-title">Questões (<span id="question-count">2</span>)</div>
                 <ul class="question-list" id="question-list">
-                    <li class="question-item" data-question="1" onclick="carregarQuestao(1)">
+                    <li class="question-item" data-question="1" onclick="loadQuestion(1)">
                         <span class="question-number">1</span>
                         Gestão de Recursos e ...
                     </li>
-                    <li class="question-item active" data-question="2" onclick="carregarQuestao(2)">
+                    <li class="question-item active" data-question="2" onclick="loadQuestion(2)">
                         <span class="question-number">2</span>
                         Liderança sob Pressã...
                     </li>
                 </ul>
-                <button class="btn-add" onclick="adicionarQuestao()">
+                <button class="btn-add" onclick="addQuestion()">
                     + Adicionar Questão
                 </button>
             </div>
@@ -923,12 +923,12 @@
                 <label class="form-label">Competências a Avaliar</label>
                 <div class="competencias-wrapper">
                     <div class="competencias-container">
-                        <div class="competencias-selected-tags empty" id="competencias-tags" onclick="toggleCompetenciasDropdown()">
+                        <div class="competencias-selected-tags empty" id="competencias-tags" onclick="toggleCompetenciesDropdown()">
                             <!-- Tags serão adicionadas aqui -->
                         </div>
                         <div class="competencias-dropdown" id="competencias-dropdown">
                             <div class="competencias-search">
-                                <input type="text" placeholder="🔍 Pesquisar competências..." id="competencias-search" oninput="filtrarCompetencias()">
+                                <input type="text" placeholder="🔍 Pesquisar competências..." id="competencias-search" oninput="filterCompetencies()">
                             </div>
                             <div id="competencias-options">
                                 <div class="no-competencias">
@@ -942,7 +942,7 @@
 
             <div class="form-group">
                 <label class="form-label">Descrição do Cenário</label>
-                <textarea class="form-textarea" id="descricao">Durante o combate, um dos elementos da equipa reporta via rádio que está desorientado e com o ar a terminar (alarme de baixa pressão ativo). O rádio tem má receção.</textarea>
+                <textarea class="form-textarea" id="description">Durante o combate, um dos elementos da equipa reporta via rádio que está desorientado e com o ar a terminar (alarme de baixa pressão ativo). O rádio tem má receção.</textarea>
             </div>
 
             <div class="options-section" id="options-container">
@@ -987,7 +987,7 @@
                 <div class="media-grid" id="media-grid">
                     <!-- Media items will be added here -->
                 </div>
-                <button class="btn-add-media" onclick="adicionarURLMedia()">
+                <button class="btn-add-media" onclick="addMediaURL ()">
                     🔗 Adicionar URL de Recurso
                 </button>
             </div>
@@ -1022,8 +1022,8 @@
                 </p>
             </div>
             <div class="modal-buttons">
-                <button class="btn-modal btn-cancel" onclick="fecharModalMedia()">Cancelar</button>
-                <button class="btn-modal btn-confirm" onclick="confirmarURLMedia()">Adicionar</button>
+                <button class="btn-modal btn-cancel" onclick="closeMediaModal ()">Cancelar</button>
+                <button class="btn-modal btn-confirm" onclick="confirmMediaURL()">Adicionar</button>
             </div>
         </div>
     </div>
@@ -1040,36 +1040,36 @@
         let optionCount = 4;
         let correctOption = 2;
         let currentQuestionId = 2;
-        let competenciasDisponiveis = [];
+        let availableCompetencies = [];
         let questionsData = {
             1: {
-                competencias: [1, 2], // IDs das competências selecionadas
-                descricao: "A equipa está a enfrentar um incêndio de grandes dimensões e os recursos disponíveis estão a esgotar-se rapidamente.",
-                opcoes: [
-                    { texto: "Continuar o combate até ao fim dos recursos", correta: false },
-                    { texto: "Solicitar reforços imediatamente e reorganizar as equipas", correta: true },
-                    { texto: "Abandonar a operação", correta: false }
+                competencies: [1, 2], // IDs das competências selecionadas
+                description: "A equipa está a enfrentar um incêndio de grandes dimensões e os recursos disponíveis estão a esgotar-se rapidamente.",
+                options: [
+                    { text: "Continuar o combate até ao fim dos recursos", right: false },
+                    { text: "Solicitar reforços imediatamente e reorganizar as equipas", right: true },
+                    { text: "Abandonar a operação", right: false }
                 ],
                 media: []
             },
             2: {
-                competencias: [3], // IDs das competências selecionadas
-                descricao: "Durante o combate, um dos elementos da equipa reporta via rádio que está desorientado e com o ar a terminar (alarme de baixa pressão ativo). O rádio tem má receção.",
-                opcoes: [
-                    { texto: "Ignorar a chamada até terminar a tarefa atual.", correta: false },
-                    { texto: "Declarar Mayday, ordenar evacuação imediata de todas as equipas e ativar", correta: true },
-                    { texto: "Tentar contactar o elemento repetidamente sem libertar o canal de rádio.", correta: false },
-                    { texto: "Enviar um estagiário à procura do elemento perdido.", correta: false }
+                competencies: [3], // IDs das competências selecionadas
+                description: "Durante o combate, um dos elementos da equipa reporta via rádio que está desorientado e com o ar a terminar (alarme de baixa pressão ativo). O rádio tem má receção.",
+                options: [
+                    { text: "Ignorar a chamada até terminar a tarefa atual.", right: false },
+                    { text: "Declarar Mayday, ordenar evacuação imediata de todas as equipas e ativar", right: true },
+                    { text: "Tentar contactar o elemento repetidamente sem libertar o canal de rádio.", right: false },
+                    { text: "Enviar um estagiário à procura do elemento perdido.", right: false }
                 ],
                 media: []
             }
         };
 
         // Função auxiliar para garantir que a cor tem o formato correto
-        function normalizarCor(cor) {
-            if (!cor) return '#3498db';
+        function normalizeColor(color) {
+            if (!color) return '#3498db';
             // Se não começar com #, adicionar
-            return cor.startsWith('#') ? cor : '#' + cor;
+            return color.startsWith('#') ? color : '#' + color;
         }
 
         // Inicializar eventos dos radio buttons
@@ -1093,10 +1093,10 @@
         initRadioButtons();
 
         // Função para carregar competências da API
-        async function carregarCompetencias() {
+        async function loadCompetencies() {
             const btn = document.getElementById('btn-load-competencias');
             const optionsDiv = document.getElementById('competencias-options');
-            const apiUrl = document.getElementById('api-competencias-url').value.trim();
+            const apiUrl = 'http://localhost:32769/api/competency/';
 
             if (!apiUrl) {
                 alert('Por favor, configure o URL da API de Competências!');
@@ -1108,14 +1108,9 @@
             optionsDiv.innerHTML = '<div class="no-competencias">A carregar competências...</div>';
 
             try {
-                const apiKey = document.getElementById('api-key').value.trim();
                 const headers = {
                     'Content-Type': 'application/json'
                 };
-
-                if (apiKey) {
-                    headers['Authorization'] = `Bearer ${apiKey}`;
-                }
 
                 const response = await fetch(apiUrl, {
                     method: 'GET',
@@ -1129,22 +1124,22 @@
                 const data = await response.json();
 
                 // Assumir que a API retorna: { competencias: [{id: 1, descricao: "...", cor: "#ef34cd"}, ...] }
-                competenciasDisponiveis = data.competencias || data;
+                availableCompetencies = data.competencias || data;
 
                 // Normalizar estrutura: aceitar tanto "nome" quanto "descricao"
-                competenciasDisponiveis = competenciasDisponiveis.map(comp => ({
+                availableCompetencies = availableCompetencies.map(comp => ({
                     id: comp.id,
-                    nome: comp.nome || comp.descricao,
-                    descricao: comp.descricao || comp.nome,
-                    cor: normalizarCor(comp.cor || comp.color)
+                    name: comp.name,
+                    description: comp.description,
+                    color: normalizeColor(comp.color)
                 }));
 
-                if (!Array.isArray(competenciasDisponiveis) || competenciasDisponiveis.length === 0) {
+                if (!Array.isArray(availableCompetencies) || availableCompetencies.length === 0) {
                     throw new Error('Nenhuma competência encontrada na resposta da API');
                 }
 
-                renderizarOpcoesCompetencias();
-                renderizarTagsCompetencias();
+                renderCompetenciesOptions();
+                renderCompetenciesTags();
 
                 btn.textContent = '✅ Competências Carregadas';
                 setTimeout(() => {
@@ -1158,27 +1153,13 @@
                 btn.disabled = false;
                 btn.textContent = '🔄 Recarregar Competências';
 
-                // Criar dados de exemplo para teste
-                console.log('Usando competências de exemplo para teste');
-                competenciasDisponiveis = [
-                    { id: 1, nome: "Gestão de Recursos e Equipamentos", descricao: "Gestão de Recursos e Equipamentos", cor: "#e74c3c" },
-                    { id: 2, nome: "Planeamento e Organização", descricao: "Planeamento e Organização", cor: "#3498db" },
-                    { id: 3, nome: "Liderança sob Pressão e Comunicações", descricao: "Liderança sob Pressão e Comunicações", cor: "#ef34cd" },
-                    { id: 4, nome: "Tomada de Decisão em Situações Críticas", descricao: "Tomada de Decisão em Situações Críticas", cor: "#f39c12" },
-                    { id: 5, nome: "Trabalho em Equipa", descricao: "Trabalho em Equipa", cor: "#9b59b6" },
-                    { id: 6, nome: "Segurança e Gestão de Risco", descricao: "Segurança e Gestão de Risco", cor: "#1abc9c" },
-                    { id: 7, nome: "Gestão de Stress e Controlo Emocional", descricao: "Gestão de Stress e Controlo Emocional", cor: "#e67e22" },
-                    { id: 8, nome: "Comunicação Eficaz", descricao: "Comunicação Eficaz", cor: "#2ecc71" },
-                    { id: 9, nome: "Resolução de Conflitos", descricao: "Resolução de Conflitos", cor: "#34495e" },
-                    { id: 10, nome: "Adaptabilidade e Flexibilidade", descricao: "Adaptabilidade e Flexibilidade", cor: "#16a085" }
-                ];
-                renderizarOpcoesCompetencias();
-                renderizarTagsCompetencias();
+                renderCompetenciesOptions();
+                renderCompetenciesTags();
             }
         }
 
         // Toggle dropdown de competências
-        function toggleCompetenciasDropdown() {
+        function toggleCompetenciesDropdown() {
             const dropdown = document.getElementById('competencias-dropdown');
             dropdown.classList.toggle('active');
 
@@ -1198,36 +1179,36 @@
         });
 
         // Renderizar opções no dropdown
-        function renderizarOpcoesCompetencias(filtro = '') {
+        function renderCompetenciesOptions(filtro = '') {
             const optionsDiv = document.getElementById('competencias-options');
             const question = questionsData[currentQuestionId];
-            const competenciasSelecionadas = question.competencias || [];
+            const selectedCompetencies = question.competencies || [];
 
-            const competenciasFiltradas = competenciasDisponiveis.filter(comp =>
-                comp.nome.toLowerCase().includes(filtro.toLowerCase())
+            const filteredCompetencies = availableCompetencies.filter(comp =>
+                comp.name.toLowerCase().includes(filtro.toLowerCase())
             );
 
-            if (competenciasFiltradas.length === 0) {
+            if (filteredCompetencies.length === 0) {
                 optionsDiv.innerHTML = '<div class="no-competencias">Nenhuma competência encontrada</div>';
                 return;
             }
 
             optionsDiv.innerHTML = '';
 
-            competenciasFiltradas.forEach(comp => {
-                const isSelected = competenciasSelecionadas.includes(comp.id);
-                const cor = normalizarCor(comp.cor);
+            filteredCompetencies.forEach(comp => {
+                const isSelected = selectedCompetencies.includes(comp.id);
+                const color = normalizeColor(comp.color);
 
                 const div = document.createElement('div');
                 div.className = 'competencia-option' + (isSelected ? ' selected' : '');
-                div.style.setProperty('--competencia-color', cor);
+                div.style.setProperty('--competencia-color', color);
                 div.onclick = () => toggleCompetencia(comp.id);
 
                 div.innerHTML = `
                     <div class="competencia-option-check">${isSelected ? '✓' : ''}</div>
-                    <div class="competencia-color-dot" style="background-color: ${cor}"></div>
+                    <div class="competencia-color-dot" style="background-color: ${color}"></div>
                     <div class="competencia-option-info">
-                        <div class="competencia-option-nome">${comp.nome}</div>
+                        <div class="competencia-option-name">${comp.name}</div>
                         <div class="competencia-option-id">ID: ${comp.id}</div>
                     </div>
                 `;
@@ -1239,47 +1220,47 @@
         // Toggle seleção de competência
         function toggleCompetencia(compId) {
             const question = questionsData[currentQuestionId];
-            if (!question.competencias) {
-                question.competencias = [];
+            if (!question.competencies) {
+                question.competencies = [];
             }
 
-            const index = question.competencias.indexOf(compId);
+            const index = question.competencies.indexOf(compId);
             if (index > -1) {
-                question.competencias.splice(index, 1);
+                question.competencies.splice(index, 1);
             } else {
-                question.competencias.push(compId);
+                question.competencies.push(compId);
             }
 
-            renderizarOpcoesCompetencias(document.getElementById('competencias-search').value);
-            renderizarTagsCompetencias();
+            renderCompetenciesOptions(document.getElementById('competencias-search').value);
+            renderCompetenciesTags();
         }
 
         // Renderizar tags selecionadas
-        function renderizarTagsCompetencias() {
+        function renderCompetenciesTags() {
             const tagsDiv = document.getElementById('competencias-tags');
             const question = questionsData[currentQuestionId];
-            const competenciasSelecionadas = question.competencias || [];
+            const selectedCompetencies = question.competencies || [];
 
             tagsDiv.innerHTML = '';
 
-            if (competenciasSelecionadas.length === 0) {
+            if (selectedCompetencies.length === 0) {
                 tagsDiv.classList.add('empty');
                 return;
             }
 
             tagsDiv.classList.remove('empty');
 
-            competenciasSelecionadas.forEach(compId => {
-                const comp = competenciasDisponiveis.find(c => c.id === compId);
+            selectedCompetencies.forEach(compId => {
+                const comp = availableCompetencies.find(c => c.id === compId);
                 if (!comp) return;
 
-                const cor = normalizarCor(comp.cor);
+                const color = normalizeColor(comp.color);
 
                 const tag = document.createElement('div');
                 tag.className = 'competencia-tag';
-                tag.style.backgroundColor = cor;
+                tag.style.backgroundColor = color;
                 tag.innerHTML = `
-                    <span>${comp.nome}</span>
+                    <span>${comp.name}</span>
                     <span class="competencia-tag-remove" onclick="event.stopPropagation(); removerCompetencia(${compId})">×</span>
                 `;
 
@@ -1288,21 +1269,21 @@
         }
 
         // Remover competência
-        function removerCompetencia(compId) {
+        function removeCompetency(compId) {
             const question = questionsData[currentQuestionId];
-            const index = question.competencias.indexOf(compId);
+            const index = question.competencies.indexOf(compId);
             if (index > -1) {
-                question.competencias.splice(index, 1);
+                question.competencies.splice(index, 1);
             }
 
-            renderizarOpcoesCompetencias(document.getElementById('competencias-search').value);
-            renderizarTagsCompetencias();
+            renderCompetenciesOptions(document.getElementById('competencias-search').value);
+            renderCompetenciesTags();
         }
 
         // Filtrar competências
-        function filtrarCompetencias() {
+        function filterCompetencies() {
             const filtro = document.getElementById('competencias-search').value;
-            renderizarOpcoesCompetencias(filtro);
+            renderCompetenciesOptions(filtro);
         }
 
         // Adicionar interatividade aos itens da lista de questões
@@ -1314,9 +1295,9 @@
         });
 
         // Função para carregar uma questão
-        function carregarQuestao(questionId) {
+        function loadQuestion(questionId) {
             // Salvar questão atual antes de trocar
-            salvarQuestaoAtual();
+            saveActualQuestion();
 
             currentQuestionId = questionId;
             const question = questionsData[questionId];
@@ -1328,9 +1309,9 @@
             document.getElementById('descricao').value = question.descricao;
 
             // Atualizar competências se já foram carregadas
-            if (competenciasDisponiveis.length > 0) {
-                renderizarTagsCompetencias();
-                renderizarOpcoesCompetencias();
+            if (availableCompetencies.length > 0) {
+                renderCompetenciesTags();
+                renderCompetenciesOptions();
             }
 
             // Limpar e recriar opções
@@ -1342,24 +1323,24 @@
             container.querySelectorAll('.option-item').forEach(item => item.remove());
 
             // Adiciona as novas opções
-            question.opcoes.forEach((opcao, index) => {
+            question.options.forEach((option, index) => {
                 const optionNum = index + 1;
                 const newOption = document.createElement('div');
                 newOption.className = 'option-item';
                 newOption.innerHTML = `
                     <span class="option-number">${optionNum}</span>
-                    <div class="radio-btn ${opcao.correta ? 'checked' : ''}" data-option="${optionNum}"></div>
-                    <input type="text" class="option-input ${opcao.correta ? 'correct' : ''}" data-option="${optionNum}" value="${opcao.texto}">
+                    <div class="radio-btn ${option.right ? 'checked' : ''}" data-option="${optionNum}"></div>
+                    <input type="text" class="option-input ${option.right ? 'correct' : ''}" data-option="${optionNum}" value="${option.text}">
                     <button class="btn-delete" onclick="deleteOption(${optionNum})">🗑️</button>
                 `;
                 container.insertBefore(newOption, btnAdd);
             });
 
-            optionCount = question.opcoes.length;
-            correctOption = question.opcoes.findIndex(o => o.correta) + 1;
+            optionCount = question.options.length;
+            correctOption = question.options.findIndex(o => o.correta) + 1;
 
             // Carregar media
-            carregarMedia(question.media || []);
+            loadMedia(question.media || []);
 
             // Reinicializar eventos
             initRadioButtons();
@@ -1374,40 +1355,40 @@
         }
 
         // Função para salvar questão atual
-        function salvarQuestaoAtual() {
-            const descricao = document.getElementById('descricao').value;
-            const opcoes = [];
+        function saveActualQuestion() {
+            const description = document.getElementById('description').value;
+            const options = [];
 
             document.querySelectorAll('.option-item').forEach(item => {
                 const input = item.querySelector('.option-input');
                 const radio = item.querySelector('.radio-btn');
-                opcoes.push({
-                    texto: input.value,
-                    correta: radio.classList.contains('checked')
+                options.push({
+                    text: input.value,
+                    right: radio.classList.contains('checked')
                 });
             });
 
             questionsData[currentQuestionId] = {
-                competencias: questionsData[currentQuestionId].competencias || [],
-                descricao,
-                opcoes,
+                competencies: questionsData[currentQuestionId].competencies || [],
+                description,
+                options,
                 media: questionsData[currentQuestionId].media || []
             };
         }
 
         // Função para adicionar nova questão
-        function adicionarQuestao() {
+        function saveQuestion() {
             // Salvar questão atual
-            salvarQuestaoAtual();
+            saveActualQuestion();
 
             // Criar nova questão
             const newQuestionId = Object.keys(questionsData).length + 1;
             questionsData[newQuestionId] = {
-                competencias: [],
-                descricao: "Descrição do cenário...",
-                opcoes: [
-                    { texto: "Opção 1", correta: true },
-                    { texto: "Opção 2", correta: false }
+                competency: [],
+                description: "Descrição do cenário...",
+                options: [
+                    { text: "Opção 1", right: true },
+                    { text: "Opção 2", right: false }
                 ],
                 media: []
             };
@@ -1417,7 +1398,7 @@
             const newItem = document.createElement('li');
             newItem.className = 'question-item';
             newItem.setAttribute('data-question', newQuestionId);
-            newItem.setAttribute('onclick', `carregarQuestao(${newQuestionId})`);
+            newItem.setAttribute('onclick', `loadQuestion(${newQuestionId})`);
             newItem.innerHTML = `
                 <span class="question-number">${newQuestionId}</span>
                 Nova Questão
@@ -1428,11 +1409,11 @@
             document.getElementById('question-count').textContent = Object.keys(questionsData).length;
 
             // Carregar a nova questão
-            carregarQuestao(newQuestionId);
+            loadQuestion(newQuestionId);
         }
 
         // Gerenciamento de Media
-        function carregarMedia(mediaArray) {
+        function loadMedia(mediaArray) {
             const mediaGrid = document.getElementById('media-grid');
             mediaGrid.innerHTML = '';
 
@@ -1463,7 +1444,7 @@
                         <span class="media-type-badge">Vídeo</span>
                     `;
                 } else if (media.type === 'youtube') {
-                    const videoId = extrairYouTubeId(media.url);
+                    const videoId = extractYouTubeId(media.url);
                     content = `
                         <div class="media-item-content">
                             <iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>
@@ -1472,7 +1453,7 @@
                         <span class="media-type-badge">YouTube</span>
                     `;
                 } else if (media.type === 'vimeo') {
-                    const videoId = extrairVimeoId(media.url);
+                    const videoId = extractVimeoId(media.url);
                     content = `
                         <div class="media-item-content">
                             <iframe src="https://player.vimeo.com/video/${videoId}" allowfullscreen></iframe>
@@ -1488,21 +1469,21 @@
         }
 
         // Extrair ID do YouTube
-        function extrairYouTubeId(url) {
+        function extractYouTubeId(url) {
             const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
             const match = url.match(regExp);
             return (match && match[2].length === 11) ? match[2] : null;
         }
 
         // Extrair ID do Vimeo
-        function extrairVimeoId(url) {
+        function extractVimeoId(url) {
             const regExp = /vimeo.*\/(\d+)/i;
             const match = url.match(regExp);
             return match ? match[1] : null;
         }
 
         // Abrir modal para adicionar URL
-        function adicionarURLMedia() {
+        function addMediaUrl() {
             document.getElementById('media-modal').classList.add('active');
             document.getElementById('media-url-input').value = '';
             document.getElementById('media-type-select').value = 'image';
@@ -1510,12 +1491,12 @@
         }
 
         // Fechar modal
-        function fecharModalMedia() {
+        function closeMediaModal() {
             document.getElementById('media-modal').classList.remove('active');
         }
 
         // Confirmar e adicionar URL
-        function confirmarURLMedia() {
+        function confirmURLMedia() {
             const url = document.getElementById('media-url-input').value.trim();
             const type = document.getElementById('media-type-select').value;
 
@@ -1554,23 +1535,23 @@
             });
 
             // Recarregar media
-            carregarMedia(questionsData[currentQuestionId].media);
+            loadMedia(questionsData[currentQuestionId].media);
 
             // Fechar modal
-            fecharModalMedia();
+            closeMediaModal();
         }
 
         // Fechar modal ao clicar fora
         document.getElementById('media-modal').addEventListener('click', function(e) {
             if (e.target === this) {
-                fecharModalMedia();
+                closeMediaModal();
             }
         });
 
         // Adicionar suporte para Enter no input
         document.getElementById('media-url-input').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
-                confirmarURLMedia();
+                confirmURLMedia();
             }
         });
 
@@ -1579,7 +1560,7 @@
             if (e.key === 'Escape') {
                 const modal = document.getElementById('media-modal');
                 if (modal.classList.contains('active')) {
-                    fecharModalMedia();
+                    closeMediaModal();
                 }
             }
         });
@@ -1589,7 +1570,7 @@
             const question = questionsData[currentQuestionId];
             if (question && question.media) {
                 question.media.splice(index, 1);
-                carregarMedia(question.media);
+                loadMedia(question.media);
             }
         }
 
@@ -1647,30 +1628,21 @@
 
         // Função para salvar tudo
         document.querySelector('.btn-save').addEventListener('click', async function() {
-            salvarQuestaoAtual();
+           saveActualQuestion();
 
             // Preparar dados para envio à API
-            const payload = prepararDadosParaAPI();
+            const payload = prepareDataForAPI();
 
             // Mostrar loading
             document.getElementById('loading-overlay').classList.add('active');
 
             try {
-                const apiUrl = document.getElementById('api-url').value.trim();
-                const apiKey = document.getElementById('api-key').value.trim();
-
-                if (!apiUrl) {
-                    throw new Error('Por favor, configure o URL da API!');
-                }
+                const apiUrl = 'http://localhost:32769/api/question/';
 
                 // Preparar headers
                 const headers = {
                     'Content-Type': 'application/json'
                 };
-
-                if (apiKey) {
-                    headers['Authorization'] = `Bearer ${apiKey}`;
-                }
 
                 // Fazer requisição à API
                 const response = await fetch(apiUrl, {
@@ -1704,54 +1676,53 @@
         });
 
         // Função para preparar dados no formato correto para a API
-        function prepararDadosParaAPI() {
-            const questoes = [];
+        function prepareDataForAPI() {
+            const questions = [];
 
             Object.keys(questionsData).forEach(questionId => {
                 const q = questionsData[questionId];
 
                 // Encontrar o índice da resposta correta
-                const respostaCorretaIndex = q.opcoes.findIndex(opcao => opcao.correta);
+                const correctAwnserIndex = q.options.findIndex(option => option.right);
 
                 // Obter informações completas das competências selecionadas
-                const competenciasInfo = q.competencias.map(compId => {
-                    const comp = competenciasDisponiveis.find(c => c.id === compId);
+                const competenciesInfo = q.competencies.map(compId => {
+                    const comp = availableCompetencies.find(c => c.id === compId);
                     return comp ? {
                         id: comp.id,
-                        descricao: comp.descricao || comp.nome,
-                        cor: comp.cor
+                        name: comp.name,
+                        color: comp.color
                     } : null;
                 }).filter(Boolean);
 
-                const questao = {
+                const question = {
                     id: parseInt(questionId),
-                    competencias: competenciasInfo,
-                    descricao: q.descricao,
-                    opcoes: q.opcoes.map((opcao, index) => ({
+                    competencies: competenciesInfo,
+                    description: q.description,
+                    options: q.options.map((option, index) => ({
                         id: index + 1,
-                        texto: opcao.texto,
-                        correta: opcao.correta
+                        text: option.text,
+                        corret: option.right
                     })),
-                    respostaCorreta: respostaCorretaIndex + 1, // Índice baseado em 1
+                    rightAwnser: correctAwnserIndex + 1, // Índice baseado em 1
                 };
 
                 // Adicionar recursos multimédia se existirem
                 if (q.media && q.media.length > 0) {
-                    questao.recursosMultimedia = q.media.map((media, index) => ({
+                    question.multiMediaRessorces = q.media.map((media, index) => ({
                         id: index + 1,
-                        tipo: media.type,
+                        type: media.type,
                         url: media.url
                     }));
                 }
 
-                questoes.push(questao);
+                questions.push(question);
             });
 
             return {
-                cenario: document.querySelector('.sidebar-input').value || "Chefe de Grupo",
-                totalQuestoes: questoes.length,
-                questoes: questoes,
-                dataEnvio: new Date().toISOString()
+                scenario: document.querySelector('.sidebar-input').value || "Chefe de Grupo",
+                totalQuestions: questions.length,
+                questions: questions,
             };
         }
     </script>
