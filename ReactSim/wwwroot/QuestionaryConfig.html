@@ -402,7 +402,7 @@
             letter-spacing: 0.5px;
         }
 
-        .competencias-container {
+        .competencies-container {
             border: 1px solid #ddd;
             border-radius: 6px;
             padding: 12px;
@@ -410,7 +410,7 @@
             min-height: 120px;
         }
 
-        .competencias-selected-tags {
+        .competencies-selected-tags {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
@@ -423,18 +423,18 @@
             transition: all 0.2s;
         }
 
-            .competencias-selected-tags:hover {
+            .competencies-selected-tags:hover {
                 border-color: #3498db;
                 background: #f0f8ff;
             }
 
-            .competencias-selected-tags.empty::before {
+            .competencies-selected-tags.empty::before {
                 content: 'Clique para selecionar competências...';
                 color: #95a5a6;
                 font-size: 14px;
             }
 
-        .competencia-tag {
+        .competency-tag {
             display: inline-flex;
             align-items: center;
             gap: 6px;
@@ -447,23 +447,23 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-            .competencia-tag:hover {
+            .competency-tag:hover {
                 filter: brightness(0.9);
                 box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
             }
 
-        .competencia-tag-remove {
+        .competency-tag-remove {
             cursor: pointer;
             font-weight: bold;
             opacity: 0.8;
             transition: opacity 0.2s;
         }
 
-            .competencia-tag-remove:hover {
+            .competency-tag-remove:hover {
                 opacity: 1;
             }
 
-        .competencias-dropdown {
+        .competencies-dropdown {
             display: none;
             position: absolute;
             top: 100%;
@@ -479,11 +479,11 @@
             z-index: 100;
         }
 
-            .competencias-dropdown.active {
+            .competencies-dropdown.active {
                 display: block;
             }
 
-        .competencia-option {
+        .competency-option {
             padding: 12px 16px;
             cursor: pointer;
             transition: background 0.2s;
@@ -494,7 +494,7 @@
             position: relative;
         }
 
-            .competencia-option::before {
+            .competency-option::before {
                 content: '';
                 position: absolute;
                 left: 0;
@@ -505,24 +505,24 @@
                 transition: background 0.2s;
             }
 
-            .competencia-option:last-child {
+            .competency-option:last-child {
                 border-bottom: none;
             }
 
-            .competencia-option:hover {
+            .competency-option:hover {
                 background: #f8f9fa;
             }
 
-            .competencia-option.selected {
+            .competency-option.selected {
                 background: #f8f9fa;
                 font-weight: 500;
             }
 
-                .competencia-option.selected::before {
-                    background: var(--competencia-color, #3498db);
+                .competency-option.selected::before {
+                    background: var(--competency-color, #3498db);
                 }
 
-        .competencia-option-check {
+        .competency-option-check {
             width: 20px;
             height: 20px;
             border: 2px solid #ddd;
@@ -534,31 +534,31 @@
             transition: all 0.2s;
         }
 
-        .competencia-option.selected .competencia-option-check {
-            background: var(--competencia-color, #3498db);
-            border-color: var(--competencia-color, #3498db);
+        .competency-option.selected .competency-option-check {
+            background: var(--competency-color, #3498db);
+            border-color: var(--competency-color, #3498db);
             color: white;
         }
 
-        .competencia-option-info {
+        .competency-option-info {
             flex: 1;
             display: flex;
             flex-direction: column;
             gap: 2px;
         }
 
-        .competencia-option-nome {
+        .competency-option-nome {
             font-size: 14px;
             color: #2c3e50;
         }
 
-        .competencia-option-id {
+        .competency-option-id {
             font-size: 11px;
             color: #95a5a6;
             font-weight: 500;
         }
 
-        .competencia-color-dot {
+        .competency-color-dot {
             width: 12px;
             height: 12px;
             border-radius: 50%;
@@ -566,17 +566,17 @@
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
         }
 
-        .competencias-wrapper {
+        .competencies-wrapper {
             position: relative;
         }
 
-        .competencias-search {
+        .competencies-search {
             padding: 12px 16px;
             border-bottom: 2px solid #f0f0f0;
             background: #fafafa;
         }
 
-            .competencias-search input {
+            .competencies-search input {
                 width: 100%;
                 padding: 8px 12px;
                 border: 1px solid #ddd;
@@ -584,19 +584,19 @@
                 font-size: 14px;
             }
 
-                .competencias-search input:focus {
+                .competencies-search input:focus {
                     outline: none;
                     border-color: #3498db;
                 }
 
-        .no-competencias {
+        .no-competencies {
             padding: 20px;
             text-align: center;
             color: #95a5a6;
             font-size: 14px;
         }
 
-        .btn-load-competencias {
+        .btn-load-competencies {
             margin-top: 8px;
             padding: 8px 12px;
             background: #3498db;
@@ -609,23 +609,23 @@
             font-weight: 600;
         }
 
-            .btn-load-competencias:hover {
+            .btn-load-competencies:hover {
                 background: #2980b9;
             }
 
-            .btn-load-competencias:disabled {
+            .btn-load-competencies:disabled {
                 background: #bdc3c7;
                 cursor: not-allowed;
             }
 
-        .competencias-loading {
+        .competencies-loading {
             text-align: center;
             padding: 20px;
             color: #7f8c8d;
             font-size: 13px;
         }
 
-        .competencias-error {
+        .competencies-error {
             text-align: center;
             padding: 20px;
             color: #e74c3c;
@@ -880,9 +880,9 @@
                 <div class="sidebar-title">Configuração API</div>
                 <div class="api-config">
                     <label class="api-label">URL API Competências</label>
-                    <input type="text" class="api-input" id="api-competencias-url" placeholder="https://api.exemplo.com/competencias" value="https://api.exemplo.com/competencias">
+                    <input type="text" class="api-input" id="api-competencies-url" placeholder="https://api.exemplo.com/competencies" value="https://api.exemplo.com/competencies">
                 </div>
-                <button class="btn-load-competencias" id="btn-load-competencias" onclick="loadCompetencies()">
+                <button class="btn-load-competencies" id="btn-load-competencies" onclick="loadCompetencies()">
                     🔄 Carregar Competências
                 </button>
                 <div class="api-config" style="margin-top: 16px;">
@@ -921,17 +921,17 @@
 
             <div class="form-group">
                 <label class="form-label">Competências a Avaliar</label>
-                <div class="competencias-wrapper">
-                    <div class="competencias-container">
-                        <div class="competencias-selected-tags empty" id="competencias-tags" onclick="toggleCompetenciesDropdown()">
+                <div class="competencies-wrapper">
+                    <div class="competencies-container">
+                        <div class="competencies-selected-tags empty" id="competencies-tags" onclick="toggleCompetenciesDropdown()">
                             <!-- Tags serão adicionadas aqui -->
                         </div>
-                        <div class="competencias-dropdown" id="competencias-dropdown">
-                            <div class="competencias-search">
-                                <input type="text" placeholder="🔍 Pesquisar competências..." id="competencias-search" oninput="filterCompetencies()">
+                        <div class="competencies-dropdown" id="competencies-dropdown">
+                            <div class="competencies-search">
+                                <input type="text" placeholder="🔍 Pesquisar competências..." id="competencies-search" oninput="filterCompetencies()">
                             </div>
-                            <div id="competencias-options">
-                                <div class="no-competencias">
+                            <div id="competencies-options">
+                                <div class="no-competencies">
                                     Clique em "Carregar Competências" na sidebar para obter a lista.
                                 </div>
                             </div>
@@ -987,7 +987,7 @@
                 <div class="media-grid" id="media-grid">
                     <!-- Media items will be added here -->
                 </div>
-                <button class="btn-add-media" onclick="addMediaURL ()">
+                <button class="btn-add-media" onclick="addMediaURL()">
                     🔗 Adicionar URL de Recurso
                 </button>
             </div>
@@ -1036,7 +1036,14 @@
         </div>
     </div>
 
+    <script src="/env.js"></script>
+
     <script>
+
+        const API_BASE = (window.__env__ && window.__env__.API_URL)
+            ? String(window.__env__.API_URL).replace(/\/$/, '')
+            : 'http://localhost:32769';
+
         let optionCount = 4;
         let correctOption = 2;
         let currentQuestionId = 2;
@@ -1075,7 +1082,7 @@
         // Inicializar eventos dos radio buttons
         function initRadioButtons() {
             document.querySelectorAll('.radio-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
+                btn.addEventListener('click', function () {
                     const optionId = this.getAttribute('data-option');
 
                     document.querySelectorAll('.radio-btn').forEach(b => b.classList.remove('checked'));
@@ -1094,9 +1101,9 @@
 
         // Função para carregar competências da API
         async function loadCompetencies() {
-            const btn = document.getElementById('btn-load-competencias');
-            const optionsDiv = document.getElementById('competencias-options');
-            const apiUrl = 'http://localhost:32769/api/competency/';
+            const btn = document.getElementById('btn-load-competencies');
+            const optionsDiv = document.getElementById('competencies-options');
+            const apiUrl = API_BASE + '/api/competency/';
 
             if (!apiUrl) {
                 alert('Por favor, configure o URL da API de Competências!');
@@ -1105,7 +1112,7 @@
 
             btn.disabled = true;
             btn.textContent = '⏳ A carregar...';
-            optionsDiv.innerHTML = '<div class="no-competencias">A carregar competências...</div>';
+            optionsDiv.innerHTML = '<div class="no-competencies">A carregar competências...</div>';
 
             try {
                 const headers = {
@@ -1123,10 +1130,10 @@
 
                 const data = await response.json();
 
-                // Assumir que a API retorna: { competencias: [{id: 1, descricao: "...", cor: "#ef34cd"}, ...] }
-                availableCompetencies = data.competencias || data;
+                // Assumir que a API retorna: { competencies: [{id: 1, description: "...", cor: "#ef34cd"}, ...] }
+                availableCompetencies = data.competencies || data;
 
-                // Normalizar estrutura: aceitar tanto "nome" quanto "descricao"
+                // Normalizar estrutura: aceitar tanto "nome" quanto "description"
                 availableCompetencies = availableCompetencies.map(comp => ({
                     id: comp.id,
                     name: comp.name,
@@ -1149,7 +1156,7 @@
 
             } catch (error) {
                 console.error('Erro ao carregar competências:', error);
-                optionsDiv.innerHTML = `<div class="no-competencias" style="color: #e74c3c;">❌ ${error.message}<br><small>Clique em "Recarregar" para tentar novamente</small></div>`;
+                optionsDiv.innerHTML = `<div class="no-competencies" style="color: #e74c3c;">❌ ${error.message}<br><small>Clique em "Recarregar" para tentar novamente</small></div>`;
                 btn.disabled = false;
                 btn.textContent = '🔄 Recarregar Competências';
 
@@ -1160,18 +1167,18 @@
 
         // Toggle dropdown de competências
         function toggleCompetenciesDropdown() {
-            const dropdown = document.getElementById('competencias-dropdown');
+            const dropdown = document.getElementById('competencies-dropdown');
             dropdown.classList.toggle('active');
 
             if (dropdown.classList.contains('active')) {
-                document.getElementById('competencias-search').focus();
+                document.getElementById('competencies-search').focus();
             }
         }
 
         // Fechar dropdown ao clicar fora
-        document.addEventListener('click', function(e) {
-            const wrapper = document.querySelector('.competencias-wrapper');
-            const dropdown = document.getElementById('competencias-dropdown');
+        document.addEventListener('click', function (e) {
+            const wrapper = document.querySelector('.competencies-wrapper');
+            const dropdown = document.getElementById('competencies-dropdown');
 
             if (wrapper && !wrapper.contains(e.target)) {
                 dropdown.classList.remove('active');
@@ -1180,7 +1187,7 @@
 
         // Renderizar opções no dropdown
         function renderCompetenciesOptions(filtro = '') {
-            const optionsDiv = document.getElementById('competencias-options');
+            const optionsDiv = document.getElementById('competencies-options');
             const question = questionsData[currentQuestionId];
             const selectedCompetencies = question.competencies || [];
 
@@ -1189,7 +1196,7 @@
             );
 
             if (filteredCompetencies.length === 0) {
-                optionsDiv.innerHTML = '<div class="no-competencias">Nenhuma competência encontrada</div>';
+                optionsDiv.innerHTML = '<div class="no-competencies">Nenhuma competência encontrada</div>';
                 return;
             }
 
@@ -1200,25 +1207,25 @@
                 const color = normalizeColor(comp.color);
 
                 const div = document.createElement('div');
-                div.className = 'competencia-option' + (isSelected ? ' selected' : '');
-                div.style.setProperty('--competencia-color', color);
-                div.onclick = () => toggleCompetencia(comp.id);
+                div.className = 'competency-option' + (isSelected ? ' selected' : '');
+                div.style.setProperty('--competency-color', color);
+                div.onclick = () => toggleCompetency(comp.id);
 
                 div.innerHTML = `
-                    <div class="competencia-option-check">${isSelected ? '✓' : ''}</div>
-                    <div class="competencia-color-dot" style="background-color: ${color}"></div>
-                    <div class="competencia-option-info">
-                        <div class="competencia-option-name">${comp.name}</div>
-                        <div class="competencia-option-id">ID: ${comp.id}</div>
-                    </div>
-                `;
+                        <div class="competency-option-check">${isSelected ? '✓' : ''}</div>
+                        <div class="competency-color-dot" style="background-color: ${color}"></div>
+                        <div class="competency-option-info">
+                            <div class="competency-option-name">${comp.name}</div>
+                            <div class="competency-option-id">ID: ${comp.id}</div>
+                        </div>
+                    `;
 
                 optionsDiv.appendChild(div);
             });
         }
 
         // Toggle seleção de competência
-        function toggleCompetencia(compId) {
+        function toggleCompetency(compId) {
             const question = questionsData[currentQuestionId];
             if (!question.competencies) {
                 question.competencies = [];
@@ -1231,13 +1238,13 @@
                 question.competencies.push(compId);
             }
 
-            renderCompetenciesOptions(document.getElementById('competencias-search').value);
+            renderCompetenciesOptions(document.getElementById('competencies-search').value);
             renderCompetenciesTags();
         }
 
         // Renderizar tags selecionadas
         function renderCompetenciesTags() {
-            const tagsDiv = document.getElementById('competencias-tags');
+            const tagsDiv = document.getElementById('competencies-tags');
             const question = questionsData[currentQuestionId];
             const selectedCompetencies = question.competencies || [];
 
@@ -1257,12 +1264,12 @@
                 const color = normalizeColor(comp.color);
 
                 const tag = document.createElement('div');
-                tag.className = 'competencia-tag';
+                tag.className = 'competency-tag';
                 tag.style.backgroundColor = color;
                 tag.innerHTML = `
-                    <span>${comp.name}</span>
-                    <span class="competencia-tag-remove" onclick="event.stopPropagation(); removerCompetencia(${compId})">×</span>
-                `;
+                        <span>${comp.name}</span>
+                        <span class="competency-tag-remove" onclick="event.stopPropagation(); removerCompetency(${compId})">×</span>
+                    `;
 
                 tagsDiv.appendChild(tag);
             });
@@ -1276,19 +1283,19 @@
                 question.competencies.splice(index, 1);
             }
 
-            renderCompetenciesOptions(document.getElementById('competencias-search').value);
+            renderCompetenciesOptions(document.getElementById('competencies-search').value);
             renderCompetenciesTags();
         }
 
         // Filtrar competências
         function filterCompetencies() {
-            const filtro = document.getElementById('competencias-search').value;
+            const filtro = document.getElementById('competencies-search').value;
             renderCompetenciesOptions(filtro);
         }
 
         // Adicionar interatividade aos itens da lista de questões
         document.querySelectorAll('.question-item').forEach(item => {
-            item.addEventListener('click', function() {
+            item.addEventListener('click', function () {
                 document.querySelectorAll('.question-item').forEach(i => i.classList.remove('active'));
                 this.classList.add('active');
             });
@@ -1306,7 +1313,7 @@
 
             // Atualizar interface
             document.getElementById('current-question-number').textContent = questionId;
-            document.getElementById('descricao').value = question.descricao;
+            document.getElementById('description').value = question.description;
 
             // Atualizar competências se já foram carregadas
             if (availableCompetencies.length > 0) {
@@ -1328,11 +1335,11 @@
                 const newOption = document.createElement('div');
                 newOption.className = 'option-item';
                 newOption.innerHTML = `
-                    <span class="option-number">${optionNum}</span>
-                    <div class="radio-btn ${option.right ? 'checked' : ''}" data-option="${optionNum}"></div>
-                    <input type="text" class="option-input ${option.right ? 'correct' : ''}" data-option="${optionNum}" value="${option.text}">
-                    <button class="btn-delete" onclick="deleteOption(${optionNum})">🗑️</button>
-                `;
+                        <span class="option-number">${optionNum}</span>
+                        <div class="radio-btn ${option.right ? 'checked' : ''}" data-option="${optionNum}"></div>
+                        <input type="text" class="option-input ${option.right ? 'correct' : ''}" data-option="${optionNum}" value="${option.text}">
+                        <button class="btn-delete" onclick="deleteOption(${optionNum})">🗑️</button>
+                    `;
                 container.insertBefore(newOption, btnAdd);
             });
 
@@ -1377,7 +1384,7 @@
         }
 
         // Função para adicionar nova questão
-        function saveQuestion() {
+        function addQuestion() {
             // Salvar questão atual
             saveActualQuestion();
 
@@ -1400,9 +1407,9 @@
             newItem.setAttribute('data-question', newQuestionId);
             newItem.setAttribute('onclick', `loadQuestion(${newQuestionId})`);
             newItem.innerHTML = `
-                <span class="question-number">${newQuestionId}</span>
-                Nova Questão
-            `;
+                    <span class="question-number">${newQuestionId}</span>
+                    Nova Questão
+                `;
             questionList.appendChild(newItem);
 
             // Atualizar contador
@@ -1429,38 +1436,38 @@
 
                 if (media.type === 'image') {
                     content = `
-                        <div class="media-item-content">
-                            <img src="${media.url}" alt="Imagem ${index + 1}" onerror="this.parentElement.innerHTML='<div class=\\'media-error\\'>Erro ao carregar imagem</div>'">
-                        </div>
-                        <button class="media-delete" onclick="deleteMedia(${index})">🗑️</button>
-                        <span class="media-type-badge">Imagem</span>
-                    `;
+                            <div class="media-item-content">
+                                <img src="${media.url}" alt="Imagem ${index + 1}" onerror="this.parentElement.innerHTML='<div class=\\'media-error\\'>Erro ao carregar imagem</div>'">
+                            </div>
+                            <button class="media-delete" onclick="deleteMedia(${index})">🗑️</button>
+                            <span class="media-type-badge">Imagem</span>
+                        `;
                 } else if (media.type === 'video') {
                     content = `
-                        <div class="media-item-content">
-                            <video src="${media.url}" controls onerror="this.parentElement.innerHTML='<div class=\\'media-error\\'>Erro ao carregar vídeo</div>'"></video>
-                        </div>
-                        <button class="media-delete" onclick="deleteMedia(${index})">🗑️</button>
-                        <span class="media-type-badge">Vídeo</span>
-                    `;
+                            <div class="media-item-content">
+                                <video src="${media.url}" controls onerror="this.parentElement.innerHTML='<div class=\\'media-error\\'>Erro ao carregar vídeo</div>'"></video>
+                            </div>
+                            <button class="media-delete" onclick="deleteMedia(${index})">🗑️</button>
+                            <span class="media-type-badge">Vídeo</span>
+                        `;
                 } else if (media.type === 'youtube') {
                     const videoId = extractYouTubeId(media.url);
                     content = `
-                        <div class="media-item-content">
-                            <iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>
-                        </div>
-                        <button class="media-delete" onclick="deleteMedia(${index})">🗑️</button>
-                        <span class="media-type-badge">YouTube</span>
-                    `;
+                            <div class="media-item-content">
+                                <iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>
+                            </div>
+                            <button class="media-delete" onclick="deleteMedia(${index})">🗑️</button>
+                            <span class="media-type-badge">YouTube</span>
+                        `;
                 } else if (media.type === 'vimeo') {
                     const videoId = extractVimeoId(media.url);
                     content = `
-                        <div class="media-item-content">
-                            <iframe src="https://player.vimeo.com/video/${videoId}" allowfullscreen></iframe>
-                        </div>
-                        <button class="media-delete" onclick="deleteMedia(${index})">🗑️</button>
-                        <span class="media-type-badge">Vimeo</span>
-                    `;
+                            <div class="media-item-content">
+                                <iframe src="https://player.vimeo.com/video/${videoId}" allowfullscreen></iframe>
+                            </div>
+                            <button class="media-delete" onclick="deleteMedia(${index})">🗑️</button>
+                            <span class="media-type-badge">Vimeo</span>
+                        `;
                 }
 
                 mediaItem.innerHTML = content;
@@ -1483,12 +1490,13 @@
         }
 
         // Abrir modal para adicionar URL
-        function addMediaUrl() {
+        function addMediaURL() {
             document.getElementById('media-modal').classList.add('active');
             document.getElementById('media-url-input').value = '';
             document.getElementById('media-type-select').value = 'image';
             document.getElementById('media-url-input').focus();
         }
+
 
         // Fechar modal
         function closeMediaModal() {
@@ -1496,7 +1504,7 @@
         }
 
         // Confirmar e adicionar URL
-        function confirmURLMedia() {
+        function confirmMediaURL() {
             const url = document.getElementById('media-url-input').value.trim();
             const type = document.getElementById('media-type-select').value;
 
@@ -1542,21 +1550,21 @@
         }
 
         // Fechar modal ao clicar fora
-        document.getElementById('media-modal').addEventListener('click', function(e) {
+        document.getElementById('media-modal').addEventListener('click', function (e) {
             if (e.target === this) {
                 closeMediaModal();
             }
         });
 
         // Adicionar suporte para Enter no input
-        document.getElementById('media-url-input').addEventListener('keypress', function(e) {
+        document.getElementById('media-url-input').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 confirmURLMedia();
             }
         });
 
         // Fechar modal com ESC
-        document.addEventListener('keydown', function(e) {
+        document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') {
                 const modal = document.getElementById('media-modal');
                 if (modal.classList.contains('active')) {
@@ -1575,22 +1583,22 @@
         }
 
         // Função para adicionar nova opção
-        document.querySelector('.btn-add-option').addEventListener('click', function() {
+        document.querySelector('.btn-add-option').addEventListener('click', function () {
             optionCount++;
             const optionsContainer = document.getElementById('options-container');
             const newOption = document.createElement('div');
             newOption.className = 'option-item';
             newOption.innerHTML = `
-                <span class="option-number">${optionCount}</span>
-                <div class="radio-btn" data-option="${optionCount}"></div>
-                <input type="text" class="option-input" data-option="${optionCount}" placeholder="Digite a opção de resposta...">
-                <button class="btn-delete" onclick="deleteOption(${optionCount})">🗑️</button>
-            `;
+                    <span class="option-number">${optionCount}</span>
+                    <div class="radio-btn" data-option="${optionCount}"></div>
+                    <input type="text" class="option-input" data-option="${optionCount}" placeholder="Digite a opção de resposta...">
+                    <button class="btn-delete" onclick="deleteOption(${optionCount})">🗑️</button>
+                `;
 
             optionsContainer.insertBefore(newOption, this);
 
             const newRadio = newOption.querySelector('.radio-btn');
-            newRadio.addEventListener('click', function() {
+            newRadio.addEventListener('click', function () {
                 const optionId = this.getAttribute('data-option');
 
                 document.querySelectorAll('.radio-btn').forEach(b => b.classList.remove('checked'));
@@ -1627,8 +1635,8 @@
         }
 
         // Função para salvar tudo
-        document.querySelector('.btn-save').addEventListener('click', async function() {
-           saveActualQuestion();
+        document.querySelector('.btn-save').addEventListener('click', async function () {
+            saveActualQuestion();
 
             // Preparar dados para envio à API
             const payload = prepareDataForAPI();
@@ -1637,7 +1645,7 @@
             document.getElementById('loading-overlay').classList.add('active');
 
             try {
-                const apiUrl = 'http://localhost:32769/api/question/';
+                const apiUrl = API_BASE + '/api/question/';
 
                 // Preparar headers
                 const headers = {
@@ -1658,9 +1666,6 @@
                     throw new Error(`Erro na API: ${response.status} - ${response.statusText}`);
                 }
 
-                const result = await response.json();
-
-                console.log('Resposta da API:', result);
                 alert('✅ Alterações guardadas com sucesso!\n\nTotal de questões: ' + Object.keys(questionsData).length);
 
             } catch (error) {
