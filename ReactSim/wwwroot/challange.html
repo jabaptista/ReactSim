@@ -459,12 +459,19 @@
     <input type="hidden" id="candidateId" value="">
     <input type="hidden" id="evaluationId" value="">
 
+    <script src="/env.js"></script>
+
     <script>
         // Configuração da API
+
+        const API_BASE = (window.__env__ && window.__env__.API_URL)
+            ? String(window.__env__.API_URL).replace(/\/$/, '')
+            : 'http://localhost:32769';
+
         const API_CONFIG = {
-            baseUrl: 'https://api.example.com', // Substitua pela URL real da API
+            baseUrl: API_BASE,
             endpoints: {
-                getQuestions: '/api/evaluations/questions',
+                getQuestions: '/api/question',
                 submitAnswers: '/api/evaluations/submit'
             }
         };
@@ -495,12 +502,14 @@
         async function loadQuestionsFromAPI() {
             try {
                 // Simulação de chamada à API - Substitua pela chamada real
-                // const response = await fetch(`${API_CONFIG.baseUrl}${API_CONFIG.endpoints.getQuestions}?evaluationId=${candidateInfo.evaluationId}`);
-                // const data = await response.json();
-                // questions = data.questions;
+                //const response = await fetch(`${API_CONFIG.baseUrl}${API_CONFIG.endpoints.getQuestions}?evaluationId=${candidateInfo.evaluationId}`);
+                //const data = await response.json();
+                //questions = data;
+                //questions = data.questions;
+
 
                 // Simulação com timeout para demonstração
-                await new Promise(resolve => setTimeout(resolve, 1500));
+                 await new Promise(resolve => setTimeout(resolve, 1500));
 
                 // Dados de exemplo - Substitua pela resposta real da API
                 questions = [
@@ -582,14 +591,14 @@
         function showError(message) {
             const content = document.getElementById('content');
             content.innerHTML = `
-                    <div class="error">
-                        <h3>Erro</h3>
-                        <p>${message}</p>
-                        <button class="btn btn-primary" onclick="initialize()" style="margin-top: 15px;">
-                            Tentar Novamente
-                        </button>
-                    </div>
-                `;
+                            <div class="error">
+                                <h3>Erro</h3>
+                                <p>${message}</p>
+                                <button class="btn btn-primary" onclick="initialize()" style="margin-top: 15px;">
+                                    Tentar Novamente
+                                </button>
+                            </div>
+                        `;
         }
 
         function renderQuestion() {
@@ -602,69 +611,69 @@
             if (q.media) {
                 if (q.media.type === 'image') {
                     mediaHtml = `
-                            <div class="scenario-media">
-                                <img src="${q.media.url}" alt="${q.media.caption || 'Imagem do cenário'}" loading="lazy">
-                                ${q.media.caption ? `<p class="media-caption">${q.media.caption}</p>` : ''}
-                            </div>
-                        `;
+                                    <div class="scenario-media">
+                                        <img src="${q.media.url}" alt="${q.media.caption || 'Imagem do cenário'}" loading="lazy">
+                                        ${q.media.caption ? `<p class="media-caption">${q.media.caption}</p>` : ''}
+                                    </div>
+                                `;
                 } else if (q.media.type === 'video') {
                     mediaHtml = `
-                            <div class="scenario-media">
-                                <video controls preload="metadata">
-                                    <source src="${q.media.url}" type="video/mp4">
-                                    Seu navegador não suporta a reprodução de vídeo.
-                                </video>
-                                ${q.media.caption ? `<p class="media-caption">${q.media.caption}</p>` : ''}
-                            </div>
-                        `;
+                                    <div class="scenario-media">
+                                        <video controls preload="metadata">
+                                            <source src="${q.media.url}" type="video/mp4">
+                                            Seu navegador não suporta a reprodução de vídeo.
+                                        </video>
+                                        ${q.media.caption ? `<p class="media-caption">${q.media.caption}</p>` : ''}
+                                    </div>
+                                `;
                 } else if (q.media.type === 'gallery' && q.media.items) {
                     mediaHtml = `
-                            <div class="media-gallery">
-                                ${q.media.items.map((item, idx) => {
+                                    <div class="media-gallery">
+                                        ${q.media.items.map((item, idx) => {
                         if (item.url.includes('.mp4') || item.url.includes('video')) {
                             return `
-                                            <div>
-                                                <video controls preload="metadata">
-                                                    <source src="${item.url}" type="video/mp4">
-                                                </video>
-                                                ${item.caption ? `<p class="media-caption">${item.caption}</p>` : ''}
-                                            </div>
-                                        `;
+                                                    <div>
+                                                        <video controls preload="metadata">
+                                                            <source src="${item.url}" type="video/mp4">
+                                                        </video>
+                                                        ${item.caption ? `<p class="media-caption">${item.caption}</p>` : ''}
+                                                    </div>
+                                                `;
                         } else {
                             return `
-                                            <div>
-                                                <img src="${item.url}" alt="${item.caption || 'Imagem ' + (idx + 1)}" loading="lazy">
-                                                ${item.caption ? `<p class="media-caption">${item.caption}</p>` : ''}
-                                            </div>
-                                        `;
+                                                    <div>
+                                                        <img src="${item.url}" alt="${item.caption || 'Imagem ' + (idx + 1)}" loading="lazy">
+                                                        ${item.caption ? `<p class="media-caption">${item.caption}</p>` : ''}
+                                                    </div>
+                                                `;
                         }
                     }).join('')}
-                            </div>
-                        `;
+                                    </div>
+                                `;
                 }
             }
 
             content.innerHTML = `
-                    <div class="scenario-header">
-                        <div class="warning-icon">⚠</div>
-                        <h2>${q.title}</h2>
-                    </div>
+                            <div class="scenario-header">
+                                <div class="warning-icon">⚠</div>
+                                <h2>${q.title}</h2>
+                            </div>
 
-                    <div class="scenario-description">
-                        ${q.description}
-                    </div>
+                            <div class="scenario-description">
+                                ${q.description}
+                            </div>
 
-                    ${mediaHtml}
+                            ${mediaHtml}
 
-                    <div class="options-title">Opções de Resposta</div>
+                            <div class="options-title">Opções de Resposta</div>
 
-                    ${q.options.map((option, index) => `
-                        <div class="option ${answers[q.id] === option.id ? 'selected' : ''}" onclick="selectOption('${option.id}')">
-                            <div class="radio"></div>
-                            <div class="option-text">${option.text}</div>
-                        </div>
-                    `).join('')}
-                `;
+                            ${q.options.map((option, index) => `
+                                <div class="option ${answers[q.id] === option.id ? 'selected' : ''}" onclick="selectOption('${option.id}')">
+                                    <div class="radio"></div>
+                                    <div class="option-text">${option.text}</div>
+                                </div>
+                            `).join('')}
+                        `;
 
             updateProgress();
             updateButtons();
@@ -676,44 +685,44 @@
             const answeredQuestions = Object.keys(answers).length;
 
             content.innerHTML = `
-                    <div class="completion-screen">
-                        <h2>✓ Avaliação Concluída!</h2>
-                        <p>Revise suas respostas e submeta a avaliação quando estiver pronto.</p>
+                            <div class="completion-screen">
+                                <h2>✓ Avaliação Concluída!</h2>
+                                <p>Revise suas respostas e submeta a avaliação quando estiver pronto.</p>
 
-                        <div class="results-summary">
-                            <div class="result-item">
-                                <span class="result-label">Candidato:</span>
-                                <span class="result-value">${candidateInfo.candidateId}</span>
-                            </div>
-                            <div class="result-item">
-                                <span class="result-label">ID da Avaliação:</span>
-                                <span class="result-value">${candidateInfo.evaluationId}</span>
-                            </div>
-                            <div class="result-item">
-                                <span class="result-label">Total de Questões:</span>
-                                <span class="result-value">${totalQuestions}</span>
-                            </div>
-                            <div class="result-item">
-                                <span class="result-label">Questões Respondidas:</span>
-                                <span class="result-value">${answeredQuestions}</span>
-                            </div>
-                            <div class="result-item">
-                                <span class="result-label">Status:</span>
-                                <span class="result-value" style="color: #22c55e;">Pronto para Submeter</span>
-                            </div>
-                        </div>
+                                <div class="results-summary">
+                                    <div class="result-item">
+                                        <span class="result-label">Candidato:</span>
+                                        <span class="result-value">${candidateInfo.candidateId}</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">ID da Avaliação:</span>
+                                        <span class="result-value">${candidateInfo.evaluationId}</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">Total de Questões:</span>
+                                        <span class="result-value">${totalQuestions}</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">Questões Respondidas:</span>
+                                        <span class="result-value">${answeredQuestions}</span>
+                                    </div>
+                                    <div class="result-item">
+                                        <span class="result-label">Status:</span>
+                                        <span class="result-value" style="color: #22c55e;">Pronto para Submeter</span>
+                                    </div>
+                                </div>
 
-                        <div id="submissionMessage"></div>
+                                <div id="submissionMessage"></div>
 
-                        <button class="btn btn-submit" id="btnSubmit" onclick="submitEvaluation()">
-                            Submeter Avaliação
-                        </button>
-                        <br>
-                        <button class="btn btn-restart" onclick="restartQuiz()">
-                            Rever Respostas
-                        </button>
-                    </div>
-                `;
+                                <button class="btn btn-submit" id="btnSubmit" onclick="submitEvaluation()">
+                                    Submeter Avaliação
+                                </button>
+                                <br>
+                                <button class="btn btn-restart" onclick="restartQuiz()">
+                                    Rever Respostas
+                                </button>
+                            </div>
+                        `;
 
             document.getElementById('btnNext').style.display = 'none';
             document.getElementById('btnPrevious').style.display = 'none';
@@ -822,13 +831,13 @@
                 console.log('Dados submetidos:', submissionData);
 
                 messageDiv.innerHTML = `
-                        <div class="submission-success">
-                            <h3>✓ Avaliação Submetida com Sucesso!</h3>
-                            <p style="margin: 0;">Suas respostas foram registradas em ${new Date().toLocaleString('pt-PT')}.</p>
-                            <p style="margin: 10px 0 0 0; font-size: 14px;">Candidato: ${candidateInfo.candidateId}</p>
-                            <p style="margin: 5px 0 0 0; font-size: 14px;">ID da Avaliação: ${candidateInfo.evaluationId}</p>
-                        </div>
-                    `;
+                                <div class="submission-success">
+                                    <h3>✓ Avaliação Submetida com Sucesso!</h3>
+                                    <p style="margin: 0;">Suas respostas foram registradas em ${new Date().toLocaleString('pt-PT')}.</p>
+                                    <p style="margin: 10px 0 0 0; font-size: 14px;">Candidato: ${candidateInfo.candidateId}</p>
+                                    <p style="margin: 5px 0 0 0; font-size: 14px;">ID da Avaliação: ${candidateInfo.evaluationId}</p>
+                                </div>
+                            `;
 
                 // Ocultar botão de submeter após sucesso
                 submitBtn.style.display = 'none';
@@ -837,11 +846,11 @@
                 console.error('Erro ao submeter:', error);
 
                 messageDiv.innerHTML = `
-                        <div class="error">
-                            <h3>Erro na Submissão</h3>
-                            <p>Não foi possível submeter a avaliação. Por favor, tente novamente.</p>
-                        </div>
-                    `;
+                                <div class="error">
+                                    <h3>Erro na Submissão</h3>
+                                    <p>Não foi possível submeter a avaliação. Por favor, tente novamente.</p>
+                                </div>
+                            `;
 
                 // Reabilitar botão em caso de erro
                 submitBtn.disabled = false;

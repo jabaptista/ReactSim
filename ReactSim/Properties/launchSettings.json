@@ -13,7 +13,9 @@
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
       "environmentVariables": {
         "ASPNETCORE_HTTP_PORTS": "8080",
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "EXECUTION_PATH": "http://localhost:32769",
+        "MONGO_CONNECTION": "mongodb+srv://ReactSimApp:MgxblJKqNIlmnEG4@cluster0.dajhe.mongodb.net/ReactSim?appName=Cluster0"
       },
       "publishAllPorts": true,
       "useSSL": false
