@@ -1691,14 +1691,8 @@
                 const correctAwnserIndex = q.options.findIndex(option => option.right);
 
                 // Obter informações completas das competências selecionadas
-                const competenciesInfo = q.competencies.map(compId => {
-                    const comp = availableCompetencies.find(c => c.id === compId);
-                    return comp ? {
-                        id: comp.id,
-                        name: comp.name,
-                        color: comp.color
-                    } : null;
-                }).filter(Boolean);
+                // Enviar apenas um array de inteiros com os ids das competências selecionadas
+                const competenciesInfo = Array.isArray(q.competencies) ? q.competencies.map(id => parseInt(id, 10)) : [];
 
                 const question = {
                     id: parseInt(questionId),
@@ -1706,8 +1700,7 @@
                     description: q.description,
                     options: q.options.map((option, index) => ({
                         id: index + 1,
-                        text: option.text,
-                        corret: option.right
+                        text: option.text
                     })),
                     rightAwnser: correctAwnserIndex + 1, // Índice baseado em 1
                 };

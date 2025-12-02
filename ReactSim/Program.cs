@@ -11,6 +11,12 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+// Register repository and services
+builder.Services.AddSingleton<ReactSim.Repositories.IDataContext, ReactSim.Repositories.MongoDBContext>();
+builder.Services.AddSingleton<ReactSim.Repositories.IMongoDbRepository, ReactSim.Repositories.MongoDBRepository>();
+builder.Services.AddSingleton<ReactSim.Repositories.IQuestionRepository, ReactSim.Repositories.QuestionRepository>();
+builder.Services.AddSingleton<ReactSim.Services.IQuestionService, ReactSim.Services.QuestionService>();
+
 var app = builder.Build();
 
 // Optional explicit API base from config/env (can override dynamic detection)
