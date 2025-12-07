@@ -479,108 +479,38 @@
         let questions = [];
         let currentQuestion = 0;
         let answers = {};
-        let candidateInfo = {
+        let activityInfo = {
             candidateId: '',
             evaluationId: ''
         };
 
-        // Inicialização
         async function initialize() {
-            // Obter parâmetros da URL (candidato e avaliação)
             const urlParams = new URLSearchParams(window.location.search);
-            candidateInfo.candidateId = urlParams.get('candidateId') || 'DEMO-CANDIDATE-001';
-            candidateInfo.evaluationId = urlParams.get('evaluationId') || 'EVAL-' + Date.now();
+            activityInfo.candidateId = urlParams.get('InvenRAstdID') || 'DEMO-CANDIDATE-001';
+            activityInfo.evaluationId = urlParams.get('activityID') || 'EVAL-' + 1;
 
-            // Preencher hidden fields
-            document.getElementById('candidateId').value = candidateInfo.candidateId;
-            document.getElementById('evaluationId').value = candidateInfo.evaluationId;
+            document.getElementById('candidateId').value = activityInfo.candidateId;
+            document.getElementById('evaluationId').value = activityInfo.evaluationId;
 
             // Carregar questões da API
             await loadQuestionsFromAPI();
-        }
+        } 
 
         async function loadQuestionsFromAPI() {
             try {
-                // Simulação de chamada à API - Substitua pela chamada real
-                //const response = await fetch(`${API_CONFIG.baseUrl}${API_CONFIG.endpoints.getQuestions}?evaluationId=${candidateInfo.evaluationId}`);
-                //const data = await response.json();
-                //questions = data;
-                //questions = data.questions;
+                const response = await fetch(`${API_CONFIG.baseUrl}${API_CONFIG.endpoints.getQuestions}`);
+                if (!response.ok) throw new Error(`API erro: ${response.status}`);
 
+                const data = await response.json();
+                // expecting { questions: [...] }
+                questions = Array.isArray(data.questions) ? data.questions : (Array.isArray(data) ? data : []);
 
-                // Simulação com timeout para demonstração
-                 await new Promise(resolve => setTimeout(resolve, 1500));
-
-                // Dados de exemplo - Substitua pela resposta real da API
-                questions = [
-                    {
-                        id: 'q1',
-                        title: "Cenário Situacional 1",
-                        description: "Incêndio urbano num 3º andar de um edifício antigo no centro histórico. A escada de serviço é estreita e há relatos de uma pessoa acamada no 4º andar. O fogo está a alastrar rapidamente pela caixa de escadas.",
-                        media: {
-                            type: 'image', // 'image', 'video', ou 'gallery'
-                            url: 'https://images.unsplash.com/photo-1577962917302-cd874c4e31d2?w=800',
-                            caption: 'Exemplo de incêndio urbano em edifício antigo'
-                        },
-                        options: [
-                            { id: 'opt1', text: "Ordenar entrada imediata pela escada com linha de ataque, ignorando a ventilação." },
-                            { id: 'opt2', text: "Estabelecer comando, solicitar auto-escada para salvamento no 4º andar e iniciar combate defensivo." },
-                            { id: 'opt3', text: "Dividir a equipa: binómio para busca e salvamento imediato (4º andar) e binómio para contenção do fogo no 3º andar." },
-                            { id: 'opt4', text: "Aguardar reforços antes de qualquer atuação." }
-                        ]
-                    },
-                    {
-                        id: 'q2',
-                        title: "Cenário Situacional 2",
-                        description: "Acidente rodoviário com veículo pesado transportando materiais perigosos (gasóleo) numa via rápida. Há derrame significativo e risco de ignição. Três vítimas encarceradas e trânsito intenso a aproximar-se.",
-                        media: {
-                            type: 'video',
-                            url: 'https://www.w3schools.com/html/mov_bbb.mp4',
-                            caption: 'Simulação de acidente com materiais perigosos'
-                        },
-                        options: [
-                            { id: 'opt1', text: "Aproximar-se imediatamente para iniciar desencarceramento das vítimas." },
-                            { id: 'opt2', text: "Estabelecer perímetro de segurança, identificar o produto, solicitar GIPS e gerir o trânsito." },
-                            { id: 'opt3', text: "Fazer arrefecimento do tanque com água enquanto se procede ao desencarceramento." },
-                            { id: 'opt4', text: "Evacuar apenas as vítimas que conseguem sair autonomamente e aguardar." }
-                        ]
-                    },
-                    {
-                        id: 'q3',
-                        title: "Cenário Situacional 3",
-                        description: "Fuga de gás natural numa zona residencial densamente povoada. Fortes odores reportados por múltiplos moradores. Empresa distribuidora ainda não chegou ao local.",
-                        media: {
-                            type: 'gallery',
-                            items: [
-                                { url: 'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=400', caption: 'Zona residencial' },
-                                { url: 'https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=400', caption: 'Sistema de gás' }
-                            ]
-                        },
-                        options: [
-                            { id: 'opt1', text: "Entrar nos edifícios para localizar a origem da fuga imediatamente." },
-                            { id: 'opt2', text: "Estabelecer perímetro, evacuar zona de risco, cortar energia elétrica e aguardar empresa." },
-                            { id: 'opt3', text: "Ventilar os edifícios abrindo todas as janelas e portas." },
-                            { id: 'opt4', text: "Usar detetores de gás em todos os edifícios antes de qualquer outra ação." }
-                        ]
-                    },
-                    {
-                        id: 'q4',
-                        title: "Cenário Situacional 4",
-                        description: "Desabamento parcial de edifício em construção com relatos de trabalhadores soterrados. Estrutura instável com risco de colapso adicional. Chuva intensa a dificultar as operações.",
-                        options: [
-                            { id: 'opt1', text: "Iniciar busca e resgate imediato com toda a equipa disponível." },
-                            { id: 'opt2', text: "Avaliar estabilidade estrutural, estabelecer zonas de segurança e solicitar especialistas em resgate estrutural." },
-                            { id: 'opt3', text: "Utilizar maquinaria pesada disponível no local para remoção rápida de escombros." },
-                            { id: 'opt4', text: "Evacuar área circundante e aguardar condições meteorológicas favoráveis." }
-                        ]
-                    }
-                ];
-
-                if (questions.length > 0) {
-                    renderQuestion();
-                } else {
+                if (questions.length === 0) {
                     showError('Nenhuma questão encontrada.');
+                    return;
                 }
+
+                renderQuestion();
 
             } catch (error) {
                 console.error('Erro ao carregar questões:', error);
@@ -668,7 +598,7 @@
                             <div class="options-title">Opções de Resposta</div>
 
                             ${q.options.map((option, index) => `
-                                <div class="option ${answers[q.id] === option.id ? 'selected' : ''}" onclick="selectOption('${option.id}')">
+                                <div class="option ${String(answers[q.id]) === String(option.id) ? 'selected' : ''}" onclick="selectOption('${option.id}')">
                                     <div class="radio"></div>
                                     <div class="option-text">${option.text}</div>
                                 </div>
@@ -692,11 +622,11 @@
                                 <div class="results-summary">
                                     <div class="result-item">
                                         <span class="result-label">Candidato:</span>
-                                        <span class="result-value">${candidateInfo.candidateId}</span>
+                                        <span class="result-value">${activityInfo.candidateId}</span>
                                     </div>
                                     <div class="result-item">
                                         <span class="result-label">ID da Avaliação:</span>
-                                        <span class="result-value">${candidateInfo.evaluationId}</span>
+                                        <span class="result-value">${activityInfo.evaluationId}</span>
                                     </div>
                                     <div class="result-item">
                                         <span class="result-label">Total de Questões:</span>
@@ -795,8 +725,8 @@
 
             // Preparar dados para submissão
             const submissionData = {
-                candidateId: candidateInfo.candidateId,
-                evaluationId: candidateInfo.evaluationId,
+                candidateId: activityInfo.candidateId,
+                evaluationId: activityInfo.evaluationId,
                 timestamp: new Date().toISOString(),
                 answers: Object.keys(answers).map(questionId => ({
                     questionId: questionId,
@@ -834,12 +764,11 @@
                                 <div class="submission-success">
                                     <h3>✓ Avaliação Submetida com Sucesso!</h3>
                                     <p style="margin: 0;">Suas respostas foram registradas em ${new Date().toLocaleString('pt-PT')}.</p>
-                                    <p style="margin: 10px 0 0 0; font-size: 14px;">Candidato: ${candidateInfo.candidateId}</p>
-                                    <p style="margin: 5px 0 0 0; font-size: 14px;">ID da Avaliação: ${candidateInfo.evaluationId}</p>
+                                    <p style="margin: 10px 0 0 0; font-size: 14px;">Candidato: ${activityInfo.candidateId}</p>
+                                    <p style="margin: 5px 0 0 0; font-size: 14px;">ID da Avaliação: ${activityInfo.evaluationId}</p>
                                 </div>
                             `;
 
-                // Ocultar botão de submeter após sucesso
                 submitBtn.style.display = 'none';
 
             } catch (error) {
@@ -852,12 +781,10 @@
                                 </div>
                             `;
 
-                // Reabilitar botão em caso de erro
                 submitBtn.disabled = false;
             }
         }
 
-        // Inicializar aplicação
         initialize();
     </script>
 </body>

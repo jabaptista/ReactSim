@@ -9,7 +9,7 @@ namespace ReactSim.Repositories.dbo
 
         public IEnumerable<AwnserOption> Options { get; set; }
 
-        public IEnumerable<string>? MediaURL { get; set; }
+        public IEnumerable<MultiMediaResource>? MediaResources { get; set; }
 
         public int RightAwnser { get; set; }
         

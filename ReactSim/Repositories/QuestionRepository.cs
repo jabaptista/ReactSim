@@ -2,6 +2,7 @@ using ReactSim.Domain.Model;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Data;
+using System.Resources;
 
 namespace ReactSim.Repositories
 {
@@ -21,7 +22,7 @@ namespace ReactSim.Repositories
                 Id = question.Id,
                 Description = question.Description,
                 Competencies = question.Competencies,
-                MediaURL = question.MediaURL,
+                MediaResources = question.MediaResources?.Select(resource => new dbo.MultiMediaResource() { Caption = resource.Caption, URL = resource.URL, Type = resource.Type}),
                 RightAwnser = question.RightAwnser,
                 Options = question.Options.Select(q => new dbo.AwnserOption { Id = q.Id, Text = q.Text })
             };
@@ -41,7 +42,7 @@ namespace ReactSim.Repositories
                     .WithId(dbo.Id.AsInt32)
                     .WithDescription(dbo.Description)
                     .WithCompetencies(dbo.Competencies)
-                    .WithMediaUrls(dbo.MediaURL)
+                    .WithMediaResources(dbo.MediaResources?.Select(resource=> new MultiMediaResource() { Caption = resource.Caption, Type = resource.Type, URL = resource.URL } ))
                     .WithRightAwnser(dbo.RightAwnser)
                     .WithOptions(dbo.Options.Select(o => new AwnserOption(o.Id, o.Text)))
                     .Build()

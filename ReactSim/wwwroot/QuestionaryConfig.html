@@ -872,27 +872,8 @@
     <div class="container">
         <aside class="sidebar">
             <div class="sidebar-section">
-                <div class="sidebar-title">Global Settings</div>
+                <div class="sidebar-title">Categoria Alvo</div>
                 <input type="text" class="sidebar-input" value="Chefe de Grupo" placeholder="Nome do grupo">
-            </div>
-
-            <div class="sidebar-section">
-                <div class="sidebar-title">Configuração API</div>
-                <div class="api-config">
-                    <label class="api-label">URL API Competências</label>
-                    <input type="text" class="api-input" id="api-competencies-url" placeholder="https://api.exemplo.com/competencies" value="https://api.exemplo.com/competencies">
-                </div>
-                <button class="btn-load-competencies" id="btn-load-competencies" onclick="loadCompetencies()">
-                    🔄 Carregar Competências
-                </button>
-                <div class="api-config" style="margin-top: 16px;">
-                    <label class="api-label">URL API Questões</label>
-                    <input type="text" class="api-input" id="api-url" placeholder="https://api.exemplo.com/questoes" value="https://api.exemplo.com/questoes">
-                </div>
-                <div class="api-config">
-                    <label class="api-label">API Key (Opcional)</label>
-                    <input type="text" class="api-input" id="api-key" placeholder="sua-api-key-aqui">
-                </div>
             </div>
 
             <div class="sidebar-section">
@@ -1009,9 +990,8 @@
                 <label class="form-label">Tipo de Recurso</label>
                 <select class="media-type-select" id="media-type-select">
                     <option value="image">Imagem</option>
-                    <option value="video">Vídeo (URL direta)</option>
-                    <option value="youtube">YouTube</option>
-                    <option value="vimeo">Vimeo</option>
+                    <option value="video">Vídeo</option>
+                    <option value="video">Object</option>
                 </select>
             </div>
             <div style="margin-top: 16px;">
@@ -1019,6 +999,13 @@
                 <input type="text" class="media-url-input" id="media-url-input" placeholder="https://exemplo.com/recurso.jpg">
                 <p style="color: #95a5a6; font-size: 12px; margin-top: 4px;">
                     Cole o URL completo do recurso alojado externamente
+                </p>
+            </div>
+            <div style="margin-top: 16px;">
+                <label class="form-label">Legenda do Recurso</label>
+                <input type="text" class="media-url-input" id="media-caption-input" placeholder="Legenda do recurso">
+                <p style="color: #95a5a6; font-size: 12px; margin-top: 4px;">
+                    Insira uma legenda para o recurso.
                 </p>
             </div>
             <div class="modal-buttons">
@@ -1072,6 +1059,10 @@
             }
         };
 
+        async function initialize() {
+            loadCompetencies();
+        } 
+
         // Função auxiliar para garantir que a cor tem o formato correto
         function normalizeColor(color) {
             if (!color) return '#3498db';
@@ -1101,7 +1092,6 @@
 
         // Função para carregar competências da API
         async function loadCompetencies() {
-            const btn = document.getElementById('btn-load-competencies');
             const optionsDiv = document.getElementById('competencies-options');
             const apiUrl = API_BASE + '/api/competency/';
 
@@ -1109,9 +1099,7 @@
                 alert('Por favor, configure o URL da API de Competências!');
                 return;
             }
-
-            btn.disabled = true;
-            btn.textContent = '⏳ A carregar...';
+            
             optionsDiv.innerHTML = '<div class="no-competencies">A carregar competências...</div>';
 
             try {
@@ -1147,12 +1135,6 @@
 
                 renderCompetenciesOptions();
                 renderCompetenciesTags();
-
-                btn.textContent = '✅ Competências Carregadas';
-                setTimeout(() => {
-                    btn.disabled = false;
-                    btn.textContent = '🔄 Recarregar Competências';
-                }, 2000);
 
             } catch (error) {
                 console.error('Erro ao carregar competências:', error);
@@ -1450,24 +1432,6 @@
                             <button class="media-delete" onclick="deleteMedia(${index})">🗑️</button>
                             <span class="media-type-badge">Vídeo</span>
                         `;
-                } else if (media.type === 'youtube') {
-                    const videoId = extractYouTubeId(media.url);
-                    content = `
-                            <div class="media-item-content">
-                                <iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>
-                            </div>
-                            <button class="media-delete" onclick="deleteMedia(${index})">🗑️</button>
-                            <span class="media-type-badge">YouTube</span>
-                        `;
-                } else if (media.type === 'vimeo') {
-                    const videoId = extractVimeoId(media.url);
-                    content = `
-                            <div class="media-item-content">
-                                <iframe src="https://player.vimeo.com/video/${videoId}" allowfullscreen></iframe>
-                            </div>
-                            <button class="media-delete" onclick="deleteMedia(${index})">🗑️</button>
-                            <span class="media-type-badge">Vimeo</span>
-                        `;
                 }
 
                 mediaItem.innerHTML = content;
@@ -1475,26 +1439,14 @@
             });
         }
 
-        // Extrair ID do YouTube
-        function extractYouTubeId(url) {
-            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-            const match = url.match(regExp);
-            return (match && match[2].length === 11) ? match[2] : null;
-        }
-
-        // Extrair ID do Vimeo
-        function extractVimeoId(url) {
-            const regExp = /vimeo.*\/(\d+)/i;
-            const match = url.match(regExp);
-            return match ? match[1] : null;
-        }
-
+        
         // Abrir modal para adicionar URL
         function addMediaURL() {
             document.getElementById('media-modal').classList.add('active');
             document.getElementById('media-url-input').value = '';
             document.getElementById('media-type-select').value = 'image';
             document.getElementById('media-url-input').focus();
+            document.getElementById('media-caption-input').value = '';
         }
 
 
@@ -1507,6 +1459,7 @@
         function confirmMediaURL() {
             const url = document.getElementById('media-url-input').value.trim();
             const type = document.getElementById('media-type-select').value;
+            const caption = document.getElementById('media-caption-input').value.trim();
 
             if (!url) {
                 alert('Por favor, insira um URL válido!');
@@ -1521,17 +1474,6 @@
                 return;
             }
 
-            // Validação específica para YouTube e Vimeo
-            if (type === 'youtube' && !url.includes('youtube.com') && !url.includes('youtu.be')) {
-                alert('Por favor, insira um URL válido do YouTube!');
-                return;
-            }
-
-            if (type === 'vimeo' && !url.includes('vimeo.com')) {
-                alert('Por favor, insira um URL válido do Vimeo!');
-                return;
-            }
-
             // Adicionar ao array de media da questão atual
             if (!questionsData[currentQuestionId].media) {
                 questionsData[currentQuestionId].media = [];
@@ -1539,7 +1481,8 @@
 
             questionsData[currentQuestionId].media.push({
                 type: type,
-                url: url
+                url: url,
+                caption : caption
             });
 
             // Recarregar media
@@ -1669,29 +1612,23 @@
                 alert('✅ Alterações guardadas com sucesso!\n\nTotal de questões: ' + Object.keys(questionsData).length);
 
             } catch (error) {
-                // Esconder loading
                 document.getElementById('loading-overlay').classList.remove('active');
 
                 console.error('Erro ao guardar:', error);
                 alert('❌ Erro ao guardar alterações:\n\n' + error.message + '\n\nVerifique o console para mais detalhes.');
 
-                // Mostrar dados no console para debug
                 console.log('Dados que seriam enviados:', payload);
             }
         });
 
-        // Função para preparar dados no formato correto para a API
         function prepareDataForAPI() {
             const questions = [];
 
             Object.keys(questionsData).forEach(questionId => {
                 const q = questionsData[questionId];
 
-                // Encontrar o índice da resposta correta
                 const correctAwnserIndex = q.options.findIndex(option => option.right);
 
-                // Obter informações completas das competências selecionadas
-                // Enviar apenas um array de inteiros com os ids das competências selecionadas
                 const competenciesInfo = Array.isArray(q.competencies) ? q.competencies.map(id => parseInt(id, 10)) : [];
 
                 const question = {
@@ -1707,10 +1644,11 @@
 
                 // Adicionar recursos multimédia se existirem
                 if (q.media && q.media.length > 0) {
-                    question.multiMediaRessorces = q.media.map((media, index) => ({
+                    question.mediaResources = q.media.map((media, index) => ({
                         id: index + 1,
                         type: media.type,
-                        url: media.url
+                        url: media.url, 
+                        caption: media.caption
                     }));
                 }
 
@@ -1723,6 +1661,8 @@
                 questions: questions,
             };
         }
+
+        initialize();
     </script>
 </body>
 </html>

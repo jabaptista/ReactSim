@@ -12,7 +12,9 @@ namespace ReactSim.Controllers
         [HttpGet]
         public IEnumerable<Competency> Index()
         {
-            var competencies = CompetenciesService.Instance.GetAllCompetencies();
+            var competenciesInstance = CompetenciesService.Instance;
+
+            var competencies = competenciesInstance.GetAllCompetencies();
 
             return competencies.Select(x => new Competency() { Id = x.Id, Name = x.Name, Description = x.Description, Color = x.Color });
         }

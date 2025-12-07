@@ -33,7 +33,7 @@ namespace ReactSim.Controllers
                     .WithRightAwnser(question.RightAwnser)
                     .WithOptions(question.Options.Select(q => new Domain.Model.AwnserOption(q.Id, q.Text)));
 
-                question.MediaURLs?.ToList().ForEach(url => builder.AddMediaUrl(url));
+                question.MultiMediaRessorces?.ToList().ForEach(mediaResource => builder.AddMediaResource(new Domain.Model.MultiMediaResource() { Caption = mediaResource.Caption, Type = mediaResource.Type, URL = mediaResource.URL}));
 
                 await questionService.CreateQuestionsAsync(builder.Build());
 
@@ -53,7 +53,7 @@ namespace ReactSim.Controllers
                 Description = x.Description,
                 Competencies = x.Competencies,
                 RightAwnser = x.RightAwnser,
-                MediaURLs = x.MediaURL,
+                MultiMediaRessorces = x.MediaResources?.Select(resource => new DTO.Questions.MultiMediaResource() {Type = resource.Type, URL = resource.URL, Caption = resource.Caption }),
                 Options = x.Options.Select(op => new DTO.Questions.AwnserOption() { Id = op.Id, Text = op.Text })
             }) is var result
                 ? Ok(result)
