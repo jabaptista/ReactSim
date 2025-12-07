@@ -12,7 +12,7 @@ namespace ReactSim.Domain.Model
 
         public IEnumerable<AwnserOption> Options { get; }
 
-        public IEnumerable<string>? MediaURL { get; }
+        public IEnumerable<MultiMediaResource>? MediaResources { get; }
 
         public int RightAwnser { get; }
 
@@ -25,97 +25,96 @@ namespace ReactSim.Domain.Model
             Options = new List<AwnserOption>();
         }
 
-        internal Question(int id, string description, IEnumerable<int> competencies, IEnumerable<AwnserOption> options, IEnumerable<string>? mediaUrl, int rightAwnser)
+        internal Question(int id, string description, IEnumerable<int> competencies, IEnumerable<AwnserOption> options, IEnumerable<MultiMediaResource>? mediaResources, int rightAwnser)
         {
             Id = id;
             Description = description ?? string.Empty;
             Competencies = competencies ?? new List<int>();
             Options = options ?? new List<AwnserOption>();
-            MediaURL = mediaUrl;
+            MediaResources = mediaResources;
             RightAwnser = rightAwnser;
         }
     }
 
     public class QuestionBuilder
     {
-        private int _id;
-        private string _description = string.Empty;
-        private readonly List<int> _competencies = new();
-        private readonly List<AwnserOption> _options = new();
-        private readonly List<string> _media = new();
-        private int _rightAwnser;
+        private int id;
+        private string description = string.Empty;
+        private readonly List<int> competencies = new();
+        private readonly List<AwnserOption> options = new();
+        private readonly List<MultiMediaResource> media = new();
+        private int rightAwnser;
 
         public QuestionBuilder WithId(int id)
         {
-            _id = id;
+            this.id = id;
             return this;
         }
 
         public QuestionBuilder WithDescription(string description)
         {
-            _description = description ?? string.Empty;
+            this.description = description ?? string.Empty;
             return this;
         }
 
         public QuestionBuilder WithCompetencies(IEnumerable<int> competencies)
         {
-            _competencies.Clear();
+            this.competencies.Clear();
             if (competencies != null)
-                _competencies.AddRange(competencies);
+                this.competencies.AddRange(competencies);
             return this;
         }
 
         public QuestionBuilder AddCompetency(int competency)
         {
-            _competencies.Add(competency);
+            this.competencies.Add(competency);
             return this;
         }
 
         public QuestionBuilder WithOptions(IEnumerable<AwnserOption> options)
         {
-            _options.Clear();
+            this.options.Clear();
             if (options != null)
-                _options.AddRange(options);
+                this.options.AddRange(options);
             return this;
         }
 
         public QuestionBuilder AddOption(AwnserOption option)
         {
             if (option != null)
-                _options.Add(option);
+                this.options.Add(option);
             return this;
         }
 
-        public QuestionBuilder WithMediaUrls(IEnumerable<string> mediaUrls)
+        public QuestionBuilder WithMediaResources(IEnumerable<MultiMediaResource> mediaResources)
         {
-            _media.Clear();
-            if (mediaUrls != null)
-                _media.AddRange(mediaUrls.Where(u => !string.IsNullOrWhiteSpace(u)));
+            this.media.Clear();
+            if (mediaResources != null)
+                media.AddRange(mediaResources.Select(m => new MultiMediaResource() {URL = m.URL, Caption = m.Caption, Type = m.Type }));
             return this;
         }
 
-        public QuestionBuilder AddMediaUrl(string url)
+        public QuestionBuilder AddMediaResource(MultiMediaResource resource)
         {
-            if (!string.IsNullOrWhiteSpace(url))
-                _media.Add(url);
+            this.media.Add(resource);
             return this;
         }
 
         public QuestionBuilder WithRightAwnser(int rightAwnser)
         {
-            _rightAwnser = rightAwnser;
+            this.rightAwnser = rightAwnser;
             return this;
         }
 
         public Question Build()
         {
             return new Question(
-                _id,
-                _description,
-                _competencies.ToList(),
-                _options.ToList(),
-                _media.Count > 0 ? _media.ToList() : null,
-                _rightAwnser
+                id,
+                description,
+                competencies.ToList(),
+                options.ToList(),
+                media.Count > 0 ? media.ToList() : null,
+                rightAwnser
             );
         }
     }

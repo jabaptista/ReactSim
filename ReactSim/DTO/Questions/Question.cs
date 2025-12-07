@@ -8,7 +8,7 @@
         
         public IEnumerable<AwnserOption> Options { get; set; }
 
-        public IEnumerable<string>? MediaURLs { get; set; }
+        public IEnumerable<MultiMediaResource>? MultiMediaRessorces { get; set; }
 
         public int RightAwnser { get; set; }
     }
