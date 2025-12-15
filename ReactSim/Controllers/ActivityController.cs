@@ -16,7 +16,7 @@ namespace ReactSim.Controllers
         [HttpPost("{id:int}")]
         public IActionResult DeployActivity([FromRoute] int id)
         {
-            var processUrl = $"{Environment.GetEnvironmentVariable("EXECUTION_PATH")}/api/Activity/{id}/process";
+            var processUrl = $"{Environment.GetEnvironmentVariable("EXECUTION_PATH")}api/Activity/{id}/process";
 
             return Ok(processUrl);
         }
@@ -25,7 +25,7 @@ namespace ReactSim.Controllers
         [HttpPost("{id:int}/process")]
         public IActionResult ProcessActivity([FromRoute] int id, [FromBody] DeployActivityRequest deployActivityRequest)
         {
-            var challangeUrl = $"{Environment.GetEnvironmentVariable("EXECUTION_PATH")}/challange.html?activityID={deployActivityRequest.activityID}&InvenRAstdID={deployActivityRequest.InventRAstdID}";
+            var challangeUrl = $"{Environment.GetEnvironmentVariable("EXECUTION_PATH")}challange.html?activityID={deployActivityRequest.activityID}&InvenRAstdID={deployActivityRequest.InventRAstdID}";
 
             return Ok(challangeUrl);
         }
