@@ -2,7 +2,7 @@
   "name": "Simulador de Resposta a situações de Emergências",
   "config_url": "https://reactsim.onrender.com/QuestionaryConfig.html",
   "json_params_url": "https://reactsim.onrender.com/api/json-params-actividade",
-  "user_url": "https://reactsim.onrender.com/Activity",
-  "analytics_url": "https://reactsim.onrender.com/Analytics",
+  "user_url": "https://reactsim.onrender.com/api/Activity",
+  "analytics_url": "https://reactsim.onrender.com/api/Analytics",
   "analytics_list_url": "https://reactsim.onrender.com/Analytics"
 }

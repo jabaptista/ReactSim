@@ -16,7 +16,7 @@ namespace ReactSim.Controllers
         [HttpPost("{id:int}")]
         public IActionResult DeployActivity([FromRoute] int id)
         {
-            var processUrl = $"{Request?.Scheme}://{Environment.GetEnvironmentVariable("EXECUTION_PATH")}/api/Activity/{id}/process";
+            var processUrl = $"{Environment.GetEnvironmentVariable("EXECUTION_PATH")}/api/Activity/{id}/process";
 
             return Ok(processUrl);
         }
