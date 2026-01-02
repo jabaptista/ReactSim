@@ -1,3 +1,6 @@
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure Kestrel para escutar apenas HTTP na porta 8080
@@ -10,11 +13,17 @@ builder.WebHost.ConfigureKestrel(options =>
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddMemoryCache();
 
 // Register repository and services
 builder.Services.AddSingleton<ReactSim.Repositories.IDataContext, ReactSim.Repositories.MongoDBContext>();
 builder.Services.AddSingleton<ReactSim.Repositories.IMongoDbRepository, ReactSim.Repositories.MongoDBRepository>();
-builder.Services.AddSingleton<ReactSim.Repositories.IQuestionRepository, ReactSim.Repositories.QuestionRepository>();
+builder.Services.AddSingleton<ReactSim.Repositories.QuestionRepository>();
+builder.Services.AddSingleton<ReactSim.Repositories.IQuestionRepository>(sp =>
+    new ReactSim.Repositories.QuestionRepositoryProxy(
+        sp.GetRequiredService<ReactSim.Repositories.QuestionRepository>(),
+        sp.GetRequiredService<ILogger<ReactSim.Repositories.QuestionRepositoryProxy>>(),
+        sp.GetRequiredService<IMemoryCache>()));
 builder.Services.AddSingleton<ReactSim.Services.IQuestionService, ReactSim.Services.QuestionService>();
 
 var app = builder.Build();
