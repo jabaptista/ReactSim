@@ -6,7 +6,7 @@ namespace ReactSim.Repositories
 {
     /// <summary>
     /// Proxy para o <see cref="IQuestionRepository"/> que acrescenta cache e registo de actividade antes
-    /// de delegar para o repositório real (acesso MongoDB).
+    /// de delegar para o repositorio real (acesso MongoDB).
     /// </summary>
     public class QuestionRepositoryProxy : IQuestionRepository
     {
@@ -35,7 +35,7 @@ namespace ReactSim.Repositories
             }
             else
             {
-                logger.LogDebug("[Proxy] Perguntas servidas a partir da cache em memória.");
+                logger.LogDebug("[Proxy] Perguntas servidas a partir da cache em memoria.");
             }
 
             return cachedQuestions;
@@ -43,7 +43,7 @@ namespace ReactSim.Repositories
 
         public async Task CreateAsync(Question question)
         {
-            logger.LogInformation("[Proxy] A encaminhar criação da pergunta {QuestionId}.", question?.Id);
+            logger.LogInformation("[Proxy] A encaminhar criacao da pergunta {QuestionId}.", question?.Id);
             await innerRepository.CreateAsync(question).ConfigureAwait(false);
             cache.Remove(CacheKey);
         }
