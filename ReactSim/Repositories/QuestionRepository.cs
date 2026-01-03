@@ -1,56 +1,32 @@
+using ReactSim.Adapters;
 using ReactSim.Domain.Model;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using System.Data;
-using System.Resources;
 
 namespace ReactSim.Repositories
 {
     public class QuestionRepository : IQuestionRepository
     {
         private readonly IMongoDbRepository mongoDbRepository;
+        private readonly IQuestionDboAdapter questionAdapter;
 
-        public QuestionRepository(IMongoDbRepository mongoDbRepository)
+        public QuestionRepository(IMongoDbRepository mongoDbRepository, IQuestionDboAdapter questionAdapter)
         {
             this.mongoDbRepository = mongoDbRepository;
+            this.questionAdapter = questionAdapter;
         }
 
-        public Task CreateAsync(Question question)
+        public async Task CreateAsync(Question question)
         {
-            var dbo = new dbo.Question()
-            {
-                Id = question.Id,
-                Description = question.Description,
-                Competencies = question.Competencies,
-                MediaResources = question.MediaResources?.Select(resource => new dbo.MultiMediaResource() { Caption = resource.Caption, URL = resource.URL, Type = resource.Type}),
-                RightAwnser = question.RightAwnser,
-                Options = question.Options.Select(q => new dbo.AwnserOption { Id = q.Id, Text = q.Text })
-            };
-
-            mongoDbRepository.AddOneAsync(dbo);
-
-            return Task.CompletedTask;
+            var dboQuestion = questionAdapter.ToDbo(question);
+            await mongoDbRepository.AddOneAsync(dboQuestion).ConfigureAwait(false);
         }
 
-        public Task<IEnumerable<Question>> GetAllAsync()
+        public async Task<IEnumerable<Question>> GetAllAsync()
         {
-            return mongoDbRepository
-                .GetAllAsync<dbo.Question>()
-                .ContinueWith(previousTask =>
-            {
-                return previousTask.Result.Select(dbo => Question.Builder()
-                    .WithId(dbo.Id.AsInt32)
-                    .WithDescription(dbo.Description)
-                    .WithCompetencies(dbo.Competencies)
-                    .WithMediaResources(dbo.MediaResources?.Select(resource=> new MultiMediaResource() { Caption = resource.Caption, Type = resource.Type, URL = resource.URL } ))
-                    .WithRightAwnser(dbo.RightAwnser)
-                    .WithOptions(dbo.Options.Select(o => new AwnserOption(o.Id, o.Text)))
-                    .Build()
-                );
-
-            }, CancellationToken.None);
-
-
+            var dboQuestions = await mongoDbRepository.GetAllAsync<dbo.Question>().ConfigureAwait(false);
+            return dboQuestions.Select(questionAdapter.FromDbo);
         }
     }
 }

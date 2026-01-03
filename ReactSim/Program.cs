@@ -24,6 +24,8 @@ builder.Services.AddSingleton<ReactSim.Repositories.IQuestionRepository>(sp =>
         sp.GetRequiredService<ReactSim.Repositories.QuestionRepository>(),
         sp.GetRequiredService<ILogger<ReactSim.Repositories.QuestionRepositoryProxy>>(),
         sp.GetRequiredService<IMemoryCache>()));
+builder.Services.AddSingleton<ReactSim.Adapters.IQuestionDtoAdapter, ReactSim.Adapters.QuestionDtoAdapter>();
+builder.Services.AddSingleton<ReactSim.Adapters.IQuestionDboAdapter, ReactSim.Adapters.QuestionDboAdapter>();
 builder.Services.AddSingleton<ReactSim.Services.IQuestionService, ReactSim.Services.QuestionService>();
 
 var app = builder.Build();

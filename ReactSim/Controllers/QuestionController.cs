@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ReactSim.Domain.Model;
+using ReactSim.Adapters;
 using ReactSim.DTO.Questions;
 using ReactSim.Services;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ReactSim.Controllers
@@ -11,9 +13,12 @@ namespace ReactSim.Controllers
     public class QuestionController : Controller
     {
         private readonly IQuestionService questionService;
-        public QuestionController(IQuestionService questionService)
+        private readonly IQuestionDtoAdapter questionAdapter;
+
+        public QuestionController(IQuestionService questionService, IQuestionDtoAdapter questionAdapter)
         {
             this.questionService = questionService;
+            this.questionAdapter = questionAdapter;
         }
 
         public IActionResult Index()
@@ -24,19 +29,10 @@ namespace ReactSim.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(FormCreationRequest formCreationRequest)
         {
-            foreach (var question in formCreationRequest.Questions)
+            foreach (var question in formCreationRequest.Questions ?? Enumerable.Empty<Question>())
             {
-                var builder = new QuestionBuilder()
-                    .WithId(question.Id)
-                    .WithDescription(question.Description)
-                    .WithCompetencies(question.Competencies)
-                    .WithRightAwnser(question.RightAwnser)
-                    .WithOptions(question.Options.Select(q => new Domain.Model.AwnserOption(q.Id, q.Text)));
-
-                question.MultiMediaRessorces?.ToList().ForEach(mediaResource => builder.AddMediaResource(new Domain.Model.MultiMediaResource() { Caption = mediaResource.Caption, Type = mediaResource.Type, URL = mediaResource.URL}));
-
-                await questionService.CreateQuestionsAsync(builder.Build());
-
+                var domainQuestion = questionAdapter.FromDto(question);
+                await questionService.CreateQuestionsAsync(domainQuestion);
             }
 
             return Ok();
@@ -46,17 +42,10 @@ namespace ReactSim.Controllers
         public async Task<IActionResult> GetQuestions()
         {
             var questions = await questionService.GetAllQuestionsAsync();
+            var dtoQuestions = questions?.Select(questionAdapter.ToDto).ToList() ?? new List<Question>();
 
-            return questions.Select(x => new DTO.Questions.Question
-            {
-                Id = x.Id,
-                Description = x.Description,
-                Competencies = x.Competencies,
-                RightAwnser = x.RightAwnser,
-                MultiMediaRessorces = x.MediaResources?.Select(resource => new DTO.Questions.MultiMediaResource() {Type = resource.Type, URL = resource.URL, Caption = resource.Caption }),
-                Options = x.Options.Select(op => new DTO.Questions.AwnserOption() { Id = op.Id, Text = op.Text })
-            }) is var result
-                ? Ok(result)
+            return dtoQuestions.Any()
+                ? Ok(dtoQuestions)
                 : NotFound();
         }
     }
