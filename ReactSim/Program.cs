@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using ReactSim.Validation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +29,11 @@ builder.Services.AddSingleton<ReactSim.Adapters.IQuestionDtoAdapter, ReactSim.Ad
 builder.Services.AddSingleton<ReactSim.Adapters.IQuestionDboAdapter, ReactSim.Adapters.QuestionDboAdapter>();
 builder.Services.AddSingleton<ReactSim.Services.IQuestionService, ReactSim.Services.QuestionService>();
 
+builder.Services.AddSingleton<IFormCreationRequestValidator, QuestionCompetenciesValidator>();
+builder.Services.AddSingleton<IFormCreationRequestValidator, QuestionOptionsValidator>();
+builder.Services.AddSingleton<IFormCreationRequestValidator, QuestionMediaResourcesValidator>();
+builder.Services.AddSingleton<IFormCreationRequestValidationPipeline, FormCreationRequestValidationPipeline>();
+ 
 var app = builder.Build();
 
 // Optional explicit API base from config/env (can override dynamic detection)

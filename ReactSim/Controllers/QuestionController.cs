@@ -2,9 +2,7 @@
 using ReactSim.Adapters;
 using ReactSim.DTO.Questions;
 using ReactSim.Services;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using ReactSim.Validation;
 
 namespace ReactSim.Controllers
 {
@@ -14,11 +12,13 @@ namespace ReactSim.Controllers
     {
         private readonly IQuestionService questionService;
         private readonly IQuestionDtoAdapter questionAdapter;
+        private readonly IFormCreationRequestValidationPipeline validationPipeline;
 
-        public QuestionController(IQuestionService questionService, IQuestionDtoAdapter questionAdapter)
+        public QuestionController(IQuestionService questionService, IQuestionDtoAdapter questionAdapter, IFormCreationRequestValidationPipeline validationPipeline)
         {
             this.questionService = questionService;
             this.questionAdapter = questionAdapter;
+            this.validationPipeline = validationPipeline;
         }
 
         public IActionResult Index()
@@ -29,6 +29,17 @@ namespace ReactSim.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(FormCreationRequest formCreationRequest)
         {
+            if (formCreationRequest == null)
+            {
+                return BadRequest("Pedido inválido: faltam dados do formulário.");
+            }
+
+            var validationErrors = validationPipeline.Validate(formCreationRequest);
+            if (validationErrors.Count > 0)
+            {
+                return BadRequest(new { Errors = validationErrors });
+            }
+
             foreach (var question in formCreationRequest.Questions ?? Enumerable.Empty<Question>())
             {
                 var domainQuestion = questionAdapter.FromDto(question);
