@@ -1,3 +1,4 @@
+using System;
 using ReactSim.Adapters;
 using ReactSim.Domain.Model;
 using System.Collections.Generic;
@@ -19,6 +20,11 @@ namespace ReactSim.Repositories
 
         public async Task CreateAsync(Question question)
         {
+            if (question == null)
+            {
+                throw new ArgumentNullException(nameof(question));
+            }
+
             var dboQuestion = questionAdapter.ToDbo(question);
             await mongoDbRepository.AddOneAsync(dboQuestion).ConfigureAwait(false);
         }

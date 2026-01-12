@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using ReactSim.Events;
 using ReactSim.Validation;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,6 +34,8 @@ builder.Services.AddSingleton<IFormCreationRequestValidator, QuestionCompetencie
 builder.Services.AddSingleton<IFormCreationRequestValidator, QuestionOptionsValidator>();
 builder.Services.AddSingleton<IFormCreationRequestValidator, QuestionMediaResourcesValidator>();
 builder.Services.AddSingleton<IFormCreationRequestValidationPipeline, FormCreationRequestValidationPipeline>();
+builder.Services.AddSingleton<IQuestionCreatedObserver, LoggingQuestionCreatedObserver>();
+builder.Services.AddSingleton<IQuestionCreatedPublisher, QuestionCreatedPublisher>();
  
 var app = builder.Build();
 
