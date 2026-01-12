@@ -47,5 +47,19 @@ namespace ReactSim.Repositories
             await innerRepository.CreateAsync(question).ConfigureAwait(false);
             cache.Remove(CacheKey);
         }
+
+		public async Task UpdateAsync(Question question)
+		{
+			logger.LogInformation("[Proxy] A encaminhar actualizacao da pergunta {QuestionId}.", question?.Id);
+			await innerRepository.UpdateAsync(question).ConfigureAwait(false);
+			cache.Remove(CacheKey);
+		}
+
+		public async Task DeleteAsync(int questionId)
+		{
+			logger.LogInformation("[Proxy] A encaminhar eliminacao da pergunta {QuestionId}.", questionId);
+			await innerRepository.DeleteAsync(questionId).ConfigureAwait(false);
+			cache.Remove(CacheKey);
+		}
     }
 }

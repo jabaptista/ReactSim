@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using ReactSim.Commands;
 using ReactSim.Validation;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +29,10 @@ builder.Services.AddSingleton<ReactSim.Repositories.IQuestionRepository>(sp =>
 builder.Services.AddSingleton<ReactSim.Adapters.IQuestionDtoAdapter, ReactSim.Adapters.QuestionDtoAdapter>();
 builder.Services.AddSingleton<ReactSim.Adapters.IQuestionDboAdapter, ReactSim.Adapters.QuestionDboAdapter>();
 builder.Services.AddSingleton<ReactSim.Services.IQuestionService, ReactSim.Services.QuestionService>();
+builder.Services.AddScoped<ICommandDispatcher, CommandDispatcher>();
+builder.Services.AddScoped<ICommandHandler<CreateQuestionCommand>, CreateQuestionCommandHandler>();
+builder.Services.AddScoped<ICommandHandler<UpdateQuestionCommand>, UpdateQuestionCommandHandler>();
+builder.Services.AddScoped<ICommandHandler<DeleteQuestionCommand>, DeleteQuestionCommandHandler>();
 
 builder.Services.AddSingleton<IFormCreationRequestValidator, QuestionCompetenciesValidator>();
 builder.Services.AddSingleton<IFormCreationRequestValidator, QuestionOptionsValidator>();

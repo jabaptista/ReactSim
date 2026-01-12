@@ -1,28 +1,53 @@
-﻿using ReactSim.Domain.Model;
+﻿using System;
+using System.Collections.Generic;
+using ReactSim.Domain.Model;
 using ReactSim.Repositories;
+using System;
 
 namespace ReactSim.Services
 {
     public class QuestionService : IQuestionService
     {
-        private readonly IQuestionRepository _repo;
+        private readonly IQuestionRepository repo;
 
         public QuestionService(IQuestionRepository repo)
         {
-            _repo = repo;
+            this.repo = repo;
         }
 
-        public Task CreateQuestionsAsync(Question question)
+        public async Task CreateQuestionsAsync(Question question)
         {
-            _repo.CreateAsync(question);
+            if (question == null)
+            {
+                throw new ArgumentNullException(nameof(question));
+            }
 
-            return Task.CompletedTask;
-            
+            await repo.CreateAsync(question).ConfigureAwait(false);
         }
 
         public Task<IEnumerable<Question>> GetAllQuestionsAsync()
         {
-            return _repo.GetAllAsync();
+            return repo.GetAllAsync();
+        }
+
+        public Task UpdateQuestionAsync(Question question)
+        {
+            if (question == null)
+            {
+                throw new ArgumentNullException(nameof(question));
+            }
+
+            return repo.UpdateAsync(question);
+        }
+
+        public Task DeleteQuestionAsync(int questionId)
+        {
+            if (questionId <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(questionId));
+            }
+
+            return repo.DeleteAsync(questionId);
         }
     }
 }

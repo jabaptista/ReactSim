@@ -5,5 +5,7 @@ namespace ReactSim.Repositories
     {
         Task<IEnumerable<Question>> GetAllAsync();
         Task CreateAsync(Question questions);
+        Task UpdateAsync(Question question);
+        Task DeleteAsync(int questionId);
     }
 }

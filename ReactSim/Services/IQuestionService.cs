@@ -1,9 +1,12 @@
-﻿namespace ReactSim.Services
-{
-    public interface IQuestionService
-    {
-        public Task<IEnumerable<Domain.Model.Question>> GetAllQuestionsAsync();
+﻿using ReactSim.Domain.Model;
 
-        public Task CreateQuestionsAsync(Domain.Model.Question questions);
-    }
+namespace ReactSim.Services
+{
+	public interface IQuestionService
+	{
+		Task<IEnumerable<Question>> GetAllQuestionsAsync();
+		Task CreateQuestionsAsync(Question question);
+		Task UpdateQuestionAsync(Question question);
+		Task DeleteQuestionAsync(int questionId);
+	}
 }
