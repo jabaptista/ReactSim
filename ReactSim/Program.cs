@@ -29,6 +29,10 @@ builder.Services.AddSingleton<ReactSim.Repositories.IQuestionRepository>(sp =>
 builder.Services.AddSingleton<ReactSim.Adapters.IQuestionDtoAdapter, ReactSim.Adapters.QuestionDtoAdapter>();
 builder.Services.AddSingleton<ReactSim.Adapters.IQuestionDboAdapter, ReactSim.Adapters.QuestionDboAdapter>();
 builder.Services.AddSingleton<ReactSim.Services.IQuestionService, ReactSim.Services.QuestionService>();
+builder.Services.AddSingleton<ReactSim.Adapters.IEvaluationDtoAdapter, ReactSim.Adapters.EvaluationDtoAdapter>();
+builder.Services.AddSingleton<ReactSim.Adapters.IEvaluationDboAdapter, ReactSim.Adapters.EvaluationDboAdapter>();
+builder.Services.AddSingleton<ReactSim.Repositories.IEvaluationRepository, ReactSim.Repositories.EvaluationRepository>();
+builder.Services.AddSingleton<ReactSim.Services.IEvaluationService, ReactSim.Services.EvaluationService>();
 
 builder.Services.AddSingleton<IFormCreationRequestValidator, QuestionCompetenciesValidator>();
 builder.Services.AddSingleton<IFormCreationRequestValidator, QuestionOptionsValidator>();
@@ -68,6 +72,7 @@ app.MapGet("/env.js", (HttpContext ctx) =>
     }
     else
     {
+
         // fallback to container default
         baseUrl = $"http://localhost:8080";
     }
