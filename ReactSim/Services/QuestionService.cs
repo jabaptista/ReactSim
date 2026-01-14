@@ -28,9 +28,9 @@ namespace ReactSim.Services
             
         }
 
-        public Task<IEnumerable<Question>> GetAllQuestionsAsync()
+        public Task<IEnumerable<Question>> GetQuestionsByActivityAsync(string activityId)
         {
-            return _repo.GetAllAsync();
+            return _repo.GetByActivityAsync(activityId);
         }
     }
 }

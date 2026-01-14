@@ -42,6 +42,7 @@ namespace ReactSim.Controllers
 
             foreach (var question in formCreationRequest.Questions ?? Enumerable.Empty<Question>())
             {
+                question.ActivityId = formCreationRequest.ActivityId;
                 var domainQuestion = questionAdapter.FromDto(question);
                 await questionService.CreateQuestionsAsync(domainQuestion);
             }
@@ -50,9 +51,14 @@ namespace ReactSim.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetQuestions()
+        public async Task<IActionResult> GetQuestions([FromQuery] string activityId)
         {
-            var questions = await questionService.GetAllQuestionsAsync();
+            if (string.IsNullOrWhiteSpace(activityId))
+            {
+                return BadRequest("activityId é obrigatório.");
+            }
+
+            var questions = await questionService.GetQuestionsByActivityAsync(activityId);
             var dtoQuestions = questions?.Select(questionAdapter.ToDto).ToList() ?? new List<Question>();
 
             return dtoQuestions.Any()

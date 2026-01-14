@@ -16,6 +16,7 @@ namespace ReactSim.Adapters
             ArgumentNullException.ThrowIfNull(dto);
 
             var builder = DomainQuestion.Builder()
+                .WithActivityId(dto.ActivityId)
                 .WithId(dto.Id)
                 .WithDescription(dto.Description)
                 .WithCompetencies(dto.Competencies ?? Enumerable.Empty<int>())
@@ -41,6 +42,7 @@ namespace ReactSim.Adapters
 
             return new DtoQuestion
             {
+                ActivityId = domain.ActivityId,
                 Id = domain.Id,
                 Description = domain.Description,
                 Competencies = domain.Competencies,

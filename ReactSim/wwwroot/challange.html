@@ -481,12 +481,14 @@
         let answers = {};
         let activityInfo = {
             candidateId: '',
-            evaluationId: ''
+            evaluationId: '',
+            activityId: ''
         };
 
         async function initialize() {
             const urlParams = new URLSearchParams(window.location.search);
             activityInfo.candidateId = urlParams.get('InvenRAstdID') || 'DEMO-CANDIDATE-001';
+            activityInfo.activityId = urlParams.get('activityID') || '';
             activityInfo.evaluationId = urlParams.get('activityID') || 'EVAL-' + 1;
 
             document.getElementById('candidateId').value = activityInfo.candidateId;
@@ -498,7 +500,7 @@
 
         async function loadQuestionsFromAPI() {
             try {
-                const response = await fetch(`${API_CONFIG.baseUrl}${API_CONFIG.endpoints.getQuestions}`);
+                const response = await fetch(`${API_CONFIG.baseUrl}${API_CONFIG.endpoints.getQuestions}?activityId=${encodeURIComponent(activityInfo.activityId)}`);
                 if (!response.ok) throw new Error(`API erro: ${response.status}`);
 
                 const data = await response.json();

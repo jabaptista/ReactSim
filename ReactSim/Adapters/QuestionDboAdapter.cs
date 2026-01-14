@@ -18,6 +18,7 @@ namespace ReactSim.Adapters
 
             var dbo = new DboQuestion
             {
+                ActivityId = domain.ActivityId,
                 Description = domain.Description,
                 Competencies = domain.Competencies?.ToList() ?? new List<int>(),
                 Options = domain.Options.Select(o => new DboAnswerOption
@@ -48,6 +49,7 @@ namespace ReactSim.Adapters
 
             var builder = DomainQuestion.Builder()
                 .WithId(dbo.GetInt32Id() ?? 0)
+                .WithActivityId(dbo.ActivityId)
                 .WithDescription(dbo.Description)
                 .WithCompetencies(dbo.Competencies ?? Enumerable.Empty<int>())
                 .WithRightAwnser(dbo.RightAwnser)
