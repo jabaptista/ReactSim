@@ -13,12 +13,14 @@ namespace ReactSim.Controllers
         private readonly IQuestionService questionService;
         private readonly IQuestionDtoAdapter questionAdapter;
         private readonly IFormCreationRequestValidationPipeline validationPipeline;
+        private readonly IActivityService activityService;
 
-        public QuestionController(IQuestionService questionService, IQuestionDtoAdapter questionAdapter, IFormCreationRequestValidationPipeline validationPipeline)
+        public QuestionController(IQuestionService questionService, IQuestionDtoAdapter questionAdapter, IFormCreationRequestValidationPipeline validationPipeline, IActivityService activityService)
         {
             this.questionService = questionService;
             this.questionAdapter = questionAdapter;
             this.validationPipeline = validationPipeline;
+            this.activityService = activityService;
         }
 
         public IActionResult Index()
@@ -40,10 +42,11 @@ namespace ReactSim.Controllers
                 return BadRequest(new { Errors = validationErrors });
             }
 
+            await activityService.EnsureDraftAsync(formCreationRequest.ActivityId).ConfigureAwait(false);
+
             foreach (var question in formCreationRequest.Questions ?? Enumerable.Empty<Question>())
             {
-                question.ActivityId = formCreationRequest.ActivityId;
-                var domainQuestion = questionAdapter.FromDto(question);
+                var domainQuestion = questionAdapter.FromDto(question, formCreationRequest.ActivityId);
                 await questionService.CreateQuestionsAsync(domainQuestion);
             }
 

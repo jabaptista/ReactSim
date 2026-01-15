@@ -51,7 +51,7 @@ namespace ReactSim.Repositories
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="item"></param>
         /// <returns></returns>
-        Task<bool> AddOneAsync<TEntity>(TEntity item) where TEntity : class, new();
+        Task<bool> AddOneAsync<TEntity>(TEntity item, bool upsert = true) where TEntity : class, new();
 
         /// <summary>
         /// A generic Add Many method.
@@ -59,7 +59,7 @@ namespace ReactSim.Repositories
         /// <typeparam name="TEntity">The type of the entity.</typeparam>
         /// <param name="items">The items.</param>
         /// <returns></returns>
-        Task<bool> AddManyAsync<TEntity>(IEnumerable<TEntity> items) where TEntity : class, new();
+        Task<bool> AddManyAsync<TEntity>(IEnumerable<TEntity> items, bool upsert = true) where TEntity : class, new();
 
         /// <summary>
         ///  Delete one with filter

@@ -7,5 +7,6 @@ namespace ReactSim.Services
     {
         Task<Activity> DeployAsync(string activityId);
         Task<Activity> RegisterStartAsync(string activityId, string participantId);
+        Task<Activity> EnsureDraftAsync(string activityId);
     }
 }

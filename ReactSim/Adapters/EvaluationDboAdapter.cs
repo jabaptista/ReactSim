@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ReactSim.Domain.Model;
+using MongoDB.Bson;
 using DboEvaluationResult = ReactSim.Repositories.dbo.EvaluationResult;
 using DboCompetencyScore = ReactSim.Repositories.dbo.CompetencyScore;
 
@@ -15,6 +16,7 @@ namespace ReactSim.Adapters
 
             return new DboEvaluationResult
             {
+                Id = new BsonString(domain.EvaluationId ?? string.Empty),
                 CandidateId = domain.CandidateId,
                 EvaluationId = domain.EvaluationId,
                 AnswersReceived = domain.AnswersReceived,

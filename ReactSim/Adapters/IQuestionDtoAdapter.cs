@@ -5,7 +5,7 @@ namespace ReactSim.Adapters
 {
     public interface IQuestionDtoAdapter
     {
-        DomainQuestion FromDto(DtoQuestion dto);
+        DomainQuestion FromDto(DtoQuestion dto, string activityId);
         DtoQuestion ToDto(DomainQuestion domain);
     }
 }

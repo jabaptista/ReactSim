@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Linq.Expressions;
+using ReactSim.Repositories.dbo;
 
 namespace ReactSim.Repositories
 {
@@ -92,9 +93,21 @@ namespace ReactSim.Repositories
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="item"></param>
         /// <returns></returns>
-        public virtual async Task<bool> AddOneAsync<TEntity>(TEntity item) where TEntity : class, new()
+        public virtual async Task<bool> AddOneAsync<TEntity>(TEntity item, bool upsert = false) where TEntity : class, new()
         {
+
             var collection = this.GetCollection<TEntity>();
+
+            if (upsert)
+            {
+                var filter = BuildIdFilter(item);
+                if (filter != null)
+                {
+                    await collection.ReplaceOneAsync(filter, item, new ReplaceOptions { IsUpsert = true }).ConfigureAwait(false);
+                    return true;
+                }
+            }
+
             await collection.InsertOneAsync(item).ConfigureAwait(false);
 
             return true;
@@ -106,9 +119,19 @@ namespace ReactSim.Repositories
         /// <typeparam name="TEntity">The type of the entity.</typeparam>
         /// <param name="items">The items.</param>
         /// <returns></returns>
-        public virtual async Task<bool> AddManyAsync<TEntity>(IEnumerable<TEntity> items) where TEntity : class, new()
+        public virtual async Task<bool> AddManyAsync<TEntity>(IEnumerable<TEntity> items, bool upsert = false) where TEntity : class, new()
         {
             var collection = this.GetCollection<TEntity>();
+
+            if (upsert)
+            {
+                foreach (var item in items)
+                {
+                    await AddOneAsync(item, true).ConfigureAwait(false);
+                }
+                return true;
+            }
+
             await collection.InsertManyAsync(items, new InsertManyOptions { IsOrdered = false }).ConfigureAwait(false);
 
             return true;
@@ -218,6 +241,16 @@ namespace ReactSim.Repositories
         }
 
         #endregion
+
+        private static FilterDefinition<TEntity>? BuildIdFilter<TEntity>(TEntity item)
+        {
+            if (item is MongoEntity mongoEntity && mongoEntity.Id != null)
+            {
+                return Builders<TEntity>.Filter.Eq("_id", mongoEntity.Id);
+            }
+
+            return null;
+        }
 
         protected IMongoCollection<TEntity> GetCollection<TEntity>()
         {

@@ -25,6 +25,8 @@ namespace ReactSim.Services
             var questions = (await questionRepository.GetAllAsync().ConfigureAwait(false))
                 ?.ToDictionary(q => q.Id) ?? new Dictionary<int, Question>();
 
+            var evaluationId = $"{submission.EvaluationId}_{submission.CandidateId}";
+
             var competencyHits = new Dictionary<int, int>();
             var totalCorrect = 0;
             var evaluated = 0;
@@ -56,7 +58,7 @@ namespace ReactSim.Services
 
             var result = new EvaluationResult(
                 submission.CandidateId,
-                submission.EvaluationId,
+                evaluationId,
                 submission.Answers.Count,
                 evaluated,
                 totalCorrect,

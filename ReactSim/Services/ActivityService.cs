@@ -39,5 +39,21 @@ namespace ReactSim.Services
             await repository.SaveAsync(activity).ConfigureAwait(false);
             return activity;
         }
+
+        public async Task<Activity> EnsureDraftAsync(string activityId)
+        {
+            if (string.IsNullOrWhiteSpace(activityId))
+            {
+                throw new ArgumentNullException(nameof(activityId));
+            }
+
+            var activity = await repository.GetOrCreateAsync(activityId).ConfigureAwait(false);
+            if (activity.Status == ActivityStatus.Draft)
+            {
+                return activity;
+            }
+
+            return activity;
+        }
     }
 }
