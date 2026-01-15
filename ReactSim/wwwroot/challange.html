@@ -481,12 +481,14 @@
         let answers = {};
         let activityInfo = {
             candidateId: '',
-            evaluationId: ''
+            evaluationId: '',
+            activityId: ''
         };
 
         async function initialize() {
             const urlParams = new URLSearchParams(window.location.search);
             activityInfo.candidateId = urlParams.get('InvenRAstdID') || 'DEMO-CANDIDATE-001';
+            activityInfo.activityId = urlParams.get('activityID') || '';
             activityInfo.evaluationId = urlParams.get('activityID') || 'EVAL-' + 1;
 
             document.getElementById('candidateId').value = activityInfo.candidateId;
@@ -498,7 +500,7 @@
 
         async function loadQuestionsFromAPI() {
             try {
-                const response = await fetch(`${API_CONFIG.baseUrl}${API_CONFIG.endpoints.getQuestions}`);
+                const response = await fetch(`${API_CONFIG.baseUrl}${API_CONFIG.endpoints.getQuestions}?activityId=${encodeURIComponent(activityInfo.activityId)}`);
                 if (!response.ok) throw new Error(`API erro: ${response.status}`);
 
                 const data = await response.json();
@@ -738,8 +740,6 @@
             messageDiv.innerHTML = '<p style="color: #64748b; margin: 20px 0;">Submetendo avaliação...</p>';
 
             try {
-                // Chamada à API - Descomente e ajuste conforme sua API
-                /*
                 const response = await fetch(`${API_CONFIG.baseUrl}${API_CONFIG.endpoints.submitAnswers}`, {
                     method: 'POST',
                     headers: {
@@ -753,10 +753,10 @@
                 }
 
                 const result = await response.json();
-                */
+                
 
                 // Simulação de envio (remover quando integrar com API real)
-                await new Promise(resolve => setTimeout(resolve, 1500));
+                //await new Promise(resolve => setTimeout(resolve, 1500));
 
                 console.log('Dados submetidos:', submissionData);
 

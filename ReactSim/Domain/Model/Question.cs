@@ -6,6 +6,7 @@ namespace ReactSim.Domain.Model
 {
     public class Question
     {
+        public string ActivityId { get; }
         public int Id { get; }
         public string Description { get; }
         public IEnumerable<int> Competencies { get; }
@@ -25,8 +26,9 @@ namespace ReactSim.Domain.Model
             Options = new List<AwnserOption>();
         }
 
-        internal Question(int id, string description, IEnumerable<int> competencies, IEnumerable<AwnserOption> options, IEnumerable<MultiMediaResource>? mediaResources, int rightAwnser)
+        internal Question(string activityId, int id, string description, IEnumerable<int> competencies, IEnumerable<AwnserOption> options, IEnumerable<MultiMediaResource>? mediaResources, int rightAwnser)
         {
+            ActivityId = activityId ?? string.Empty;
             Id = id;
             Description = description ?? string.Empty;
             Competencies = competencies ?? new List<int>();
@@ -39,6 +41,7 @@ namespace ReactSim.Domain.Model
     public class QuestionBuilder
     {
         private int id;
+        private string activityId = string.Empty;
         private string description = string.Empty;
         private readonly List<int> competencies = new();
         private readonly List<AwnserOption> options = new();
@@ -48,6 +51,12 @@ namespace ReactSim.Domain.Model
         public QuestionBuilder WithId(int id)
         {
             this.id = id;
+            return this;
+        }
+
+        public QuestionBuilder WithActivityId(string activityId)
+        {
+            this.activityId = activityId ?? string.Empty;
             return this;
         }
 
@@ -109,6 +118,7 @@ namespace ReactSim.Domain.Model
         public Question Build()
         {
             return new Question(
+                activityId,
                 id,
                 description,
                 competencies.ToList(),

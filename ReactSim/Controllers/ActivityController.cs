@@ -1,6 +1,7 @@
 ﻿using AutoFixture;
 using Microsoft.AspNetCore.Mvc;
 using ReactSim.DTO.Activity;
+using ReactSim.Services;
 using System.Runtime.ConstrainedExecution;
 
 namespace ReactSim.Controllers
@@ -9,23 +10,28 @@ namespace ReactSim.Controllers
     [ApiController]
     public class ActivityController : ControllerBase
     {
-        public ActivityController()
+        private readonly IActivityService activityService;
+
+        public ActivityController(IActivityService activityService)
         {
+            this.activityService = activityService;
         }
 
-        [HttpPost("{id:int}")]
-        public IActionResult DeployActivity([FromRoute] int id)
-        {
-            var processUrl = $"{Environment.GetEnvironmentVariable("EXECUTION_PATH")}api/Activity/{id}/process";
+        [HttpPost("{activityId}")]
+        public async Task<IActionResult> DeployActivity([FromRoute] string activityId)
+         {
+            await activityService.DeployAsync(activityId).ConfigureAwait(false);
+            var processUrl = $"{Environment.GetEnvironmentVariable("EXECUTION_PATH")}/api/Activity/{activityId}/process";
 
             return Ok(processUrl);
         }
 
 
-        [HttpPost("{id:int}/process")]
-        public IActionResult ProcessActivity([FromRoute] int id, [FromBody] DeployActivityRequest deployActivityRequest)
+        [HttpPost("{activityId}/process")]
+        public async Task<IActionResult> ProcessActivity([FromRoute] string activityId, [FromBody] DeployActivityRequest deployActivityRequest)
         {
-            var challangeUrl = $"{Environment.GetEnvironmentVariable("EXECUTION_PATH")}challange.html?activityID={deployActivityRequest.activityID}&InvenRAstdID={deployActivityRequest.InventRAstdID}";
+            await activityService.RegisterStartAsync(activityId, deployActivityRequest.InventRAstdID).ConfigureAwait(false);
+            var challangeUrl = $"{Environment.GetEnvironmentVariable("EXECUTION_PATH")}/challange.html?activityID={deployActivityRequest.activityID}&InvenRAstdID={deployActivityRequest.InventRAstdID}";
 
             return Ok(challangeUrl);
         }

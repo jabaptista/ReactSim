@@ -4,6 +4,7 @@ namespace ReactSim.Repositories.dbo
 {
     public class Question : MongoEntity
     {
+        public string ActivityId { get; set; }
         public string Description { get; set; }
         public IEnumerable<int> Competencies { get; set; }
 

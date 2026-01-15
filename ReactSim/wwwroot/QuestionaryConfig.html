@@ -873,7 +873,11 @@
         <aside class="sidebar">
             <div class="sidebar-section">
                 <div class="sidebar-title">Categoria Alvo</div>
-                <input type="text" class="sidebar-input" value="Chefe de Grupo" placeholder="Nome do grupo">
+                <input id="scenario-input" type="text" class="sidebar-input" value="Chefe de Grupo" placeholder="Nome do grupo">
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Identificador da Atividade</div>
+                <input id="activity-id-input" type="text" class="sidebar-input" value="EVAL-1" placeholder="Identificador da atividade">
             </div>
 
             <div class="sidebar-section">
@@ -1656,7 +1660,8 @@
             });
 
             return {
-                scenario: document.querySelector('.sidebar-input').value || "Chefe de Grupo",
+                scenario: (document.getElementById('scenario-input')?.value || "Chefe de Grupo"),
+                activityId: (document.getElementById('activity-id-input')?.value || ''),
                 totalQuestions: questions.length,
                 questions: questions,
             };
