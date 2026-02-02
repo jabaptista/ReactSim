@@ -2,10 +2,6 @@
 {
     public class CompetenciesService : ICompetenciesService
     {
-        public static CompetenciesService Instance { get; } = new CompetenciesService();
-
-        private CompetenciesService() { }
-
         public IEnumerable<Domain.Model.Competency> GetAllCompetencies()
         {
             return new List<Domain.Model.Competency>
