@@ -6,7 +6,7 @@ namespace ReactSim.Controllers
 
     [Route("api/json-params-actividade")]
     [ApiController]
-    public class JsonParamsActividadeController : Controller
+    public class JsonParamsActividadeController : ControllerBase
     {
         [HttpGet]
         public IActionResult Index()

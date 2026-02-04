@@ -7,7 +7,7 @@ namespace ReactSim.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    public class CompetencyController : Controller
+    public class CompetencyController : ControllerBase
     {
         private readonly ICompetenciesService competenciesService;
 
@@ -17,11 +17,11 @@ namespace ReactSim.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Competency> Index()
+        public ActionResult<IEnumerable<Competency>> Get()
         {
             var competencies = competenciesService.GetAllCompetencies();
-
-            return competencies.Select(x => new Competency() { Id = x.Id, Name = x.Name, Description = x.Description, Color = x.Color });
+            var result = competencies.Select(x => new Competency() { Id = x.Id, Name = x.Name, Description = x.Description, Color = x.Color });
+            return Ok(result);
         }
     }
 }

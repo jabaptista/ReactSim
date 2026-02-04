@@ -6,7 +6,7 @@ namespace ReactSim.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AnalyticsController : Controller
+    public class AnalyticsController : ControllerBase
     {
         private readonly IFixture fixture;
 
