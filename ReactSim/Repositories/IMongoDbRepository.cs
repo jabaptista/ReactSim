@@ -133,3 +133,4 @@ namespace ReactSim.Repositories
         Task<List<TProjection>> ToListAsync<TProjection>(IAggregateFluent<TProjection> aggregateFluent);
     }
 }
+

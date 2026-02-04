@@ -9,4 +9,4 @@ namespace ReactSim.Repositories
         Task UpdateAsync(Question question);
         Task DeleteAsync(int questionId);
     }
-}
+} 

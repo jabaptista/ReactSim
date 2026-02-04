@@ -9,12 +9,17 @@ namespace ReactSim.Controllers
     [ApiController]
     public class CompetencyController : Controller
     {
+        private readonly ICompetenciesService competenciesService;
+
+        public CompetencyController(ICompetenciesService competenciesService)
+        {
+            this.competenciesService = competenciesService;
+        }
+
         [HttpGet]
         public IEnumerable<Competency> Index()
         {
-            var competenciesInstance = CompetenciesService.Instance;
-
-            var competencies = competenciesInstance.GetAllCompetencies();
+            var competencies = competenciesService.GetAllCompetencies();
 
             return competencies.Select(x => new Competency() { Id = x.Id, Name = x.Name, Description = x.Description, Color = x.Color });
         }
