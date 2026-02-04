@@ -54,16 +54,6 @@ namespace ReactSim.Repositories
         {
             return innerRepository.GetAllAsync();
         }
-
-        public Task UpdateAsync(Question question)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task DeleteAsync(int questionId)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
 

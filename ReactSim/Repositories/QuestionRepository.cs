@@ -42,16 +42,6 @@ namespace ReactSim.Repositories
             var dboQuestions = await mongoDbRepository.GetAllAsync<dbo.Question>().ConfigureAwait(false);
             return dboQuestions.Select(questionAdapter.FromDbo);
         }
-
-        public Task UpdateAsync(Question question)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task DeleteAsync(int questionId)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
 

@@ -15,11 +15,6 @@ namespace ReactSim.Repositories
             this.context = context;
         }
 
-        public virtual async Task<List<TEntity>> ToListAsync<TEntity>(IFindFluent<TEntity, TEntity> findFluent)
-        {
-            return await findFluent.ToListAsync().ConfigureAwait(false);
-        }
-
         #region Get
 
         /// <summary>
@@ -47,18 +42,6 @@ namespace ReactSim.Repositories
         }
 
         /// <summary>
-        /// FindCursor
-        /// </summary>
-        /// <typeparam name="TEntity"></typeparam>
-        /// <param name="filter"></param>
-        /// <returns>A cursor for the query</returns>
-        public virtual IFindFluent<TEntity, TEntity> FindCursor<TEntity>(FilterDefinition<TEntity> filter, FindOptions options = null) where TEntity : class, new()
-        {
-            var collection = this.GetCollection<TEntity>();
-            return collection.Find(filter, options);
-        }
-
-        /// <summary>
         /// A generic get all method
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
@@ -67,20 +50,6 @@ namespace ReactSim.Repositories
         {
             var collection = this.GetCollection<TEntity>();
             return await collection.Find(new BsonDocument()).ToListAsync().ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// A generic count method
-        /// </summary>
-        /// <typeparam name="TEntity"></typeparam>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public virtual async Task<long> CountAsync<TEntity>(FilterDefinition<TEntity> filter) where TEntity : class, new()
-        {
-            var collection = this.GetCollection<TEntity>();
-            var cursor = collection.Find(filter);
-            var count = await cursor.CountDocumentsAsync().ConfigureAwait(false);
-            return count;
         }
 
         #endregion Get
@@ -139,36 +108,6 @@ namespace ReactSim.Repositories
 
         #endregion Create
 
-        #region Delete
-
-        /// <summary>
-        /// A generic delete one method
-        /// </summary>
-        /// <typeparam name="TEntity"></typeparam>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public virtual async Task<bool> DeleteOneAsync<TEntity>(FilterDefinition<TEntity> filter) where TEntity : class, new()
-        {
-            var collection = this.GetCollection<TEntity>();
-            var deleteRes = await collection.DeleteOneAsync(filter).ConfigureAwait(false);
-            return true;
-        }
-
-        /// <summary>
-        /// A generic delete many method
-        /// </summary>
-        /// <typeparam name="TEntity"></typeparam>
-        /// <param name="ids"></param>
-        /// <returns></returns>
-        public virtual async Task<bool> DeleteManyAsync<TEntity>(FilterDefinition<TEntity> filter) where TEntity : class, new()
-        {
-            var collection = this.GetCollection<TEntity>();
-            var deleteRes = await collection.DeleteManyAsync(filter).ConfigureAwait(false);
-            return true;
-        }
-
-        #endregion Delete
-
         #region Update
 
         /// <summary>
@@ -182,21 +121,6 @@ namespace ReactSim.Repositories
         {
             var collection = this.GetCollection<TEntity>();
             var updateRes = await collection.UpdateOneAsync(filter, update, options).ConfigureAwait(false);
-
-            return true;
-        }
-
-        /// <summary>
-        /// UpdateMany with filter
-        /// </summary>
-        /// <typeparam name="TEntity"></typeparam>
-        /// <param name="filter"></param>
-        /// <param name="update"></param>
-        /// <returns></returns>
-        public virtual async Task<bool> UpdateManyAsync<TEntity>(FilterDefinition<TEntity> filter, UpdateDefinition<TEntity> update) where TEntity : class, new()
-        {
-            var collection = this.GetCollection<TEntity>();
-            var updateRes = await collection.UpdateManyAsync(filter, update).ConfigureAwait(false);
 
             return true;
         }
@@ -222,25 +146,6 @@ namespace ReactSim.Repositories
         }
 
         #endregion Find And Update
-
-        #region Aggregate 
-
-        public virtual IAggregateFluent<TEntity> GetCollectionAggregate<TEntity>() where TEntity : class, new()
-        {
-            return this.GetCollection<TEntity>().Aggregate();
-        }
-
-        public virtual IAggregateFluent<TProjection> GroupStage<TEntity, TKey, TProjection>(IAggregateFluent<TEntity> aggregateFluent, Expression<Func<TEntity, TKey>> id, Expression<Func<IGrouping<TKey, TEntity>, TProjection>> group) where TEntity : class, new()
-        {
-            return aggregateFluent.Group(id, group);
-        }
-
-        public virtual async Task<List<TProjection>> ToListAsync<TProjection>(IAggregateFluent<TProjection> aggregateFluent)
-        {
-            return await aggregateFluent.ToListAsync().ConfigureAwait(false);
-        }
-
-        #endregion
 
         private static FilterDefinition<TEntity>? BuildIdFilter<TEntity>(TEntity item)
         {
