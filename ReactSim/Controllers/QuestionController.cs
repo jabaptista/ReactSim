@@ -8,7 +8,7 @@ namespace ReactSim.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class QuestionController : Controller
+    public class QuestionController : ControllerBase
     {
         private readonly IQuestionService questionService;
         private readonly IQuestionDtoAdapter questionAdapter;
@@ -21,11 +21,6 @@ namespace ReactSim.Controllers
             this.questionAdapter = questionAdapter;
             this.validationPipeline = validationPipeline;
             this.activityService = activityService;
-        }
-
-        public IActionResult Index()
-        {
-            return View();
         }
 
         [HttpPost]
