@@ -7,3 +7,4 @@ namespace ReactSim.Repositories
         IMongoCollection<TEntity> GetCollection<TEntity>();
     }
 }
+

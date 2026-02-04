@@ -30,3 +30,4 @@ namespace ReactSim.Repositories.dbo
         public void SetInt32Id(int id) => Id = new BsonInt32(id);
     }
 }
+ 
